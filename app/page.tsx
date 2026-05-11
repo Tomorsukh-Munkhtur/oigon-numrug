@@ -1,66 +1,102 @@
-import Image from "next/image";
+const organizations = [
+  {
+    name: "Ойгон Нөмрөг Үл Хөдлөх",
+    label: "Үл хөдлөх хөрөнгө",
+    description:
+      "Орон сууц, газар, арилжааны талбайн зөвлөгөө, борлуулалт, түрээсийн найдвартай шийдэл.",
+    href: "#real-estate",
+    action: "Дэлгэрэнгүй",
+    side: "realEstate",
+  },
+  {
+    name: "Ойгон Нөмрөг ХАБ",
+    label: "Хөдөлмөрийн аюулгүй байдал",
+    description:
+      "Ажлын байрны эрсдэлийн үнэлгээ, сургалт, хяналт, хамгаалалтын соёлыг төлөвшүүлэх үйлчилгээ.",
+    href: "#safety",
+    action: "Танилцах",
+    side: "safety",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            helloo tomorsukh
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
+    <main className="min-h-screen bg-[#101412] text-white">
+      <section className="grid min-h-screen grid-cols-1 md:grid-cols-2">
+        {organizations.map((organization) => (
           <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            key={organization.name}
+            href={organization.href}
+            className={[
+              "org-panel group relative flex min-h-[50vh] overflow-hidden px-7 py-10 transition duration-300 md:min-h-screen md:px-12 lg:px-16",
+              organization.side === "realEstate"
+                ? "org-panel-real-estate text-[#19231f]"
+                : "org-panel-safety text-[#f5f2ea]",
+            ].join(" ")}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+            <div
+              className="org-panel-pattern absolute inset-0"
+              aria-hidden="true"
             />
-            Deploy Now
+
+            <div className="relative z-10 flex w-full flex-col justify-between gap-12">
+              <div className="flex items-center justify-between gap-6">
+                <div className="flex items-center gap-4">
+                  <span
+                    className={[
+                      "grid h-16 w-16 shrink-0 place-items-center rounded-md border text-xl font-bold shadow-sm",
+                      organization.side === "realEstate"
+                        ? "border-[#b98b36]/35 bg-white/70 text-[#80601f]"
+                        : "border-[#80d0b2]/30 bg-white/8 text-[#99e0c5]",
+                    ].join(" ")}
+                    aria-hidden="true"
+                  >
+                    {organization.side === "realEstate" ? "ҮХ" : "ХАБ"}
+                  </span>
+                  <div>
+                    <p
+                      className={[
+                        "text-sm font-semibold uppercase tracking-[0.18em]",
+                        organization.side === "realEstate"
+                          ? "text-[#80601f]"
+                          : "text-[#99e0c5]",
+                      ].join(" ")}
+                    >
+                      {organization.label}
+                    </p>
+                    <h1 className="mt-2 max-w-lg text-3xl font-semibold leading-tight sm:text-4xl lg:text-5xl">
+                      {organization.name}
+                    </h1>
+                  </div>
+                </div>
+              </div>
+
+              <div className="max-w-xl">
+                <p
+                  className={[
+                    "text-lg leading-8 sm:text-xl",
+                    organization.side === "realEstate"
+                      ? "text-[#40514a]"
+                      : "text-[#d7e7df]",
+                  ].join(" ")}
+                >
+                  {organization.description}
+                </p>
+                <span
+                  className={[
+                    "mt-8 inline-flex h-12 items-center justify-center rounded-md px-6 text-sm font-semibold transition group-hover:translate-x-1",
+                    organization.side === "realEstate"
+                      ? "bg-[#19231f] text-white"
+                      : "bg-[#f5f2ea] text-[#13251f]",
+                  ].join(" ")}
+                >
+                  {organization.action}
+                </span>
+              </div>
+            </div>
           </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+        ))}
+      </section>
+    </main>
   );
 }
