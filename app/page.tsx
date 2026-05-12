@@ -30,7 +30,7 @@ const organizations: Organization[] = [
     background: "/real-estate-bg.jpg",
     description:
       "Орон сууц, газар, арилжааны талбайн зөвлөгөө, борлуулалт, түрээсийн найдвартай шийдэл.",
-    href: "#real-estate",
+    href: "/real-estate",
     action: "Дэлгэрэнгүй",
     side: "realEstate",
   },
