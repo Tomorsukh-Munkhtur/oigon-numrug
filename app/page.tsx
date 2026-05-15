@@ -41,7 +41,7 @@ const organizations: Organization[] = [
     background: "/safety-bg.jpg",
     description:
       "Ажлын байрны эрсдэлийн үнэлгээ, сургалт, хяналт, хамгаалалтын соёлыг төлөвшүүлэх үйлчилгээ.",
-    href: "#safety",
+    href: "/safety",
     action: "Танилцах",
     side: "safety",
   },
