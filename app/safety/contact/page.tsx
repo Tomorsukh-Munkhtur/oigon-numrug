@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import type { CSSProperties } from "react";
 
 export default function SafetyContactPage() {
   return (
@@ -26,27 +27,27 @@ export default function SafetyContactPage() {
 
           <div className="sf-contact-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px', marginTop: '60px' }}>
             <div className="sf-card sf-reveal">
-               <div className="sf-card-stripe" style={{ '--accent': '#FF9800' } as any} />
-               <div className="sf-icon-wrap" style={{ fontSize: '32px', marginBottom: '20px' }}>📞</div>
-               <h3>Утас</h3>
-               <p style={{ fontSize: '18px', fontWeight: '600', color: 'var(--sf-dark)' }}>+976 8800 0000</p>
-               <p style={{ opacity: 0.7 }}>Ажлын цагаар холбогдоно уу.</p>
+              <div className="sf-card-stripe" style={{ '--accent': '#FF9800' } as CSSProperties} />
+              <div className="sf-icon-wrap" style={{ fontSize: '32px', marginBottom: '20px' }}>📞</div>
+              <h3>Утас</h3>
+              <p style={{ fontSize: '18px', fontWeight: '600', color: 'var(--sf-dark)' }}>+976 8800 0000</p>
+              <p style={{ opacity: 0.7 }}>Ажлын цагаар холбогдоно уу.</p>
             </div>
-            
+
             <div className="sf-card sf-reveal" style={{ transitionDelay: '100ms' }}>
-               <div className="sf-card-stripe" style={{ '--accent': '#2196F3' } as any} />
-               <div className="sf-icon-wrap" style={{ fontSize: '32px', marginBottom: '20px' }}>✉️</div>
-               <h3>И-мэйл</h3>
-               <p style={{ fontSize: '18px', fontWeight: '600', color: 'var(--sf-dark)' }}>safety@oigonnumrug.mn</p>
-               <p style={{ opacity: 0.7 }}>Бид 24 цагийн дотор хариулах болно.</p>
+              <div className="sf-card-stripe" style={{ '--accent': '#2196F3' } as CSSProperties} />
+              <div className="sf-icon-wrap" style={{ fontSize: '32px', marginBottom: '20px' }}>✉️</div>
+              <h3>И-мэйл</h3>
+              <p style={{ fontSize: '18px', fontWeight: '600', color: 'var(--sf-dark)' }}>safety@oigonnumrug.mn</p>
+              <p style={{ opacity: 0.7 }}>Бид 24 цагийн дотор хариулах болно.</p>
             </div>
 
             <div className="sf-card sf-reveal" style={{ transitionDelay: '200ms' }}>
-               <div className="sf-card-stripe" style={{ '--accent': '#4CAF50' } as any} />
-               <div className="sf-icon-wrap" style={{ fontSize: '32px', marginBottom: '20px' }}>📍</div>
-               <h3>Хаяг</h3>
-               <p style={{ fontSize: '18px', fontWeight: '600', color: 'var(--sf-dark)' }}>Улаанбаатар хот, Сүхбаатар дүүрэг</p>
-               <p style={{ opacity: 0.7 }}>Ойгон Нөмрөг Төв байр</p>
+              <div className="sf-card-stripe" style={{ '--accent': '#4CAF50' } as CSSProperties} />
+              <div className="sf-icon-wrap" style={{ fontSize: '32px', marginBottom: '20px' }}>📍</div>
+              <h3>Хаяг</h3>
+              <p style={{ fontSize: '18px', fontWeight: '600', color: 'var(--sf-dark)' }}>Улаанбаатар хот, Сүхбаатар дүүрэг</p>
+              <p style={{ opacity: 0.7 }}>Ойгон Нөмрөг Төв байр</p>
             </div>
           </div>
         </div>
