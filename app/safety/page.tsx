@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import type { CSSProperties } from "react";
 import Link from "next/link";
 
 const stats = [
@@ -23,7 +24,7 @@ export default function SafetyPage() {
             <span className="sf-badge">⛑️ ХӨДӨЛМӨР АЮУЛГҮЙ БАЙДАЛ, ЭРҮҮЛ АХУЙ</span>
             <h1>Аюулгүй байдлын <span className="sf-gradient-text">стандарт тогтооно</span></h1>
             <p className="sf-hero-desc">
-              Бид олон улсын стандартын дагуу ажлын байрны эрсдэлийг бууруулж, 
+              Бид олон улсын стандартын дагуу ажлын байрны эрсдэлийг бууруулж,
               хамгаалалтын дэвшилтэт соёлыг таны байгууллагад нутагшуулна.
             </p>
             <div className="sf-hero-actions">
@@ -63,13 +64,13 @@ export default function SafetyPage() {
           </div>
           <div className="sf-card-grid sf-card-grid--2">
             <div className="sf-card sf-reveal">
-              <div className="sf-card-stripe" style={{ '--accent': '#FF9800' } as any} />
+              <div className="sf-card-stripe" style={{ '--accent': '#FF9800' } as CSSProperties} />
               <h3>Мэргэшүүлэх сургалт</h3>
               <p>Бид ажилтан бүрт тохирсон ХАБЭА-н цогц сургалтууд онол болон практик хосолсон байдлаар явуулдаг.</p>
               <Link href="/safety/training" className="sf-link">Сургалтууд үзэх</Link>
             </div>
             <div className="sf-card sf-reveal">
-              <div className="sf-card-stripe" style={{ '--accent': '#2196F3' } as any} />
+              <div className="sf-card-stripe" style={{ '--accent': '#2196F3' } as CSSProperties} />
               <h3>Мэргэжлийн үйлчилгээ</h3>
               <p>Эрсдэлийн үнэлгээ, аудит болон зөвлөх үйлчилгээгээр дамжуулан таны байгууллагыг эрсдэлээс хамгаална.</p>
               <Link href="/safety/services" className="sf-link">Бүх үйлчилгээ</Link>
