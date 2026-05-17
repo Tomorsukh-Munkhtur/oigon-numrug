@@ -12,7 +12,7 @@ export default function SafetyContactPage() {
         <div className="sf-container">
           <div className="sf-hero-content">
             <span className="sf-tag">Холбоо барих</span>
-            <h1 style={{ fontSize: '48px' }}>Бидэнтэй <span className="sf-gradient-text">холбогдоно уу</span></h1>
+            <h1 className="sf-hero-title" style={{ fontSize: '48px' }}>Бидэнтэй <span style={{ color: 'var(--sf-yellow)' }}>холбогдоно уу</span></h1>
           </div>
         </div>
       </section>

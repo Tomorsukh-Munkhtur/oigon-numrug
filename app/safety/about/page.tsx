@@ -12,7 +12,7 @@ export default function SafetyAboutPage() {
         <div className="sf-container">
           <div className="sf-hero-content">
             <span className="sf-tag">Бидний тухай</span>
-            <h1 style={{ fontSize: '48px' }}>Мэргэжлийн <span className="sf-gradient-text">хандлага</span></h1>
+            <h1 className="sf-hero-title" style={{ fontSize: '48px' }}>Мэргэжлийн <span style={{ color: 'var(--sf-yellow)' }}>хандлага</span></h1>
           </div>
         </div>
       </section>
@@ -33,11 +33,8 @@ export default function SafetyAboutPage() {
               </div>
             </div>
             <div className="sf-about-visual">
-               <div className="sf-stripe-card">
-                  <div className="sf-stripe-inner">
-                     <h3>АЮУЛГҮЙ БАЙДАЛ 1-Т</h3>
-                     <p>БҮХ ГҮЙЦЭТГЭЛД СТАНДАРТ БАРИМТЛАХ НЬ БИДНИЙ ЗАРЧИМ</p>
-                  </div>
+               <div style={{ position: 'relative', width: '100%', aspectRatio: '4/3', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}>
+                 <Image src="/project-office.jpg" alt="Баг хамт олон" fill style={{ objectFit: 'cover' }} />
                </div>
             </div>
           </div>

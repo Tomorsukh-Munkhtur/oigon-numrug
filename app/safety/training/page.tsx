@@ -54,7 +54,7 @@ export default function SafetyTrainingPage() {
         <div className="sf-container">
           <div className="sf-hero-content">
             <span className="sf-tag">Мэргэшүүлэх сургалт</span>
-            <h1 style={{ fontSize: '48px' }}>ХАБЭА-н <span className="sf-gradient-text">цогц сургалтууд</span></h1>
+            <h1 className="sf-hero-title" style={{ fontSize: '48px' }}>ХАБЭА-н <span style={{ color: 'var(--sf-yellow)' }}>цогц сургалтууд</span></h1>
           </div>
         </div>
       </section>

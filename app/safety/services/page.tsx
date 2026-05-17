@@ -38,7 +38,7 @@ export default function SafetyServicesPage() {
         <div className="sf-container">
           <div className="sf-hero-content">
             <span className="sf-tag">Манай үйлчилгээ</span>
-            <h1 style={{ fontSize: '48px' }}>Аюулгүй байдлын <span className="sf-gradient-text">цогц шийдэл</span></h1>
+            <h1 className="sf-hero-title" style={{ fontSize: '48px' }}>Аюулгүй байдлын <span style={{ color: 'var(--sf-yellow)' }}>цогц шийдэл</span></h1>
           </div>
         </div>
       </section>
