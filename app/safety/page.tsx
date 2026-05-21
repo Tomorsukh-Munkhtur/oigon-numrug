@@ -1,112 +1,178 @@
-"use client";
-
 import Image from "next/image";
-import type { CSSProperties } from "react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { getSafetyPage, listSafetyNews, parseExtra } from "@/lib/safety/content";
 
+export const dynamic = "force-dynamic";
 
+type HomeExtra = {
+  weatherIcon: string;
+  weatherCity: string;
+  weatherTemp: string;
+  weatherCondition: string;
+  weatherWind: string;
+  weatherHumidity: string;
+};
 
-const latestNews = [
-  { id: 1, date: "2026-05-15", title: "ХАБЭА-н шинэ стандарт хэрэгжиж эхэллээ", desc: "Олон улсын ISO 45001 стандартын хүрээнд байгууллагууд юуг анхаарах хэрэгтэй вэ?", image: "/project-office.jpg" },
-  { id: 2, date: "2026-05-10", title: "Өндөрт ажиллах үеийн эрсдэлээс сэргийлэх нь", desc: "Барилгын талбайд өндөрт ажиллах үеийн ослын шалтгаан, түүнээс урьдчилан сэргийлэх арга замууд.", image: "/safety-bg.jpg" },
-  { id: 3, date: "2026-05-02", title: "Галын аюулгүй байдлын сургалт амжилттай боллоо", desc: "Өнгөрсөн 7 хоногт зохион байгуулагдсан галын аюулаас урьдчилан сэргийлэх практик сургалтын тайлан.", image: "/real-estate-bg.jpg" },
-  { id: 4, date: "2026-04-28", title: "Ажлын байрны стресс ба ХАБЭА", desc: "Ажилтны сэтгэл зүйн эрүүл мэнд ажлын бүтээмжид хэрхэн нөлөөлөх вэ?", image: "/project-office.jpg" },
-  { id: 5, date: "2026-04-20", title: "Анхны тусламж үзүүлэх чадварыг сайжруулах", desc: "Ажлын байранд осол гарсан үед үзүүлэх анхны тусламжийн 5 чухал алхам.", image: "/safety-bg.jpg" },
-];
+function metricValue(raw: string) {
+  const idx = raw.indexOf(":");
+  return idx === -1 ? raw.trim() : raw.slice(idx + 1).trim();
+}
 
 export default function SafetyPage() {
-  const [weather, setWeather] = useState({ temp: "--", condition: "Уншиж байна...", wind: "--", humidity: "--" });
-
-  useEffect(() => {
-    // Mocking an API call for weather
-    setTimeout(() => {
-      setWeather({
-        temp: "+18°C",
-        condition: "Цэлмэг, бага зэргийн үүлтэй",
-        wind: "Салхи: 4 м/с",
-        humidity: "Чийгшил: 45%",
-      });
-    }, 1000);
-  }, []);
+  const page = getSafetyPage("home");
+  const latestNews = listSafetyNews({ limit: 5 });
+  const weather = parseExtra<HomeExtra>(page, {
+    weatherIcon: "🌤️",
+    weatherCity: "Дархан хот",
+    weatherTemp: "+18°C",
+    weatherCondition: "Цэлмэг, бага зэргийн үүлтэй",
+    weatherWind: "Салхи: 4 м/с",
+    weatherHumidity: "Чийгшил: 45%",
+  });
 
   return (
     <>
-      {/* Enhanced Hero */}
       <section className="sf-hero">
-        <Image src="/safety-bg.jpg" alt="Safety background" fill priority sizes="100vw" className="sf-hero-image" />
+        <Image
+          src={page.hero_image || "/safety-bg.jpg"}
+          alt="Safety background"
+          fill
+          priority
+          sizes="100vw"
+          className="sf-hero-image"
+        />
         <div className="sf-hero-overlay" />
         <div className="sf-container">
-          <div className="sf-hero-content" style={{ maxWidth: '800px' }}>
-            <h1 className="sf-hero-title">Аюулгүй байдлын <span style={{ color: 'var(--sf-yellow)' }}>стандарт тогтооно</span></h1>
-            <p className="sf-hero-desc">
-              Бид олон улсын стандартын дагуу ажлын байрны эрсдэлийг бууруулж,
-              хамгаалалтын дэвшилтэт соёлыг таны байгууллагад нутагшуулна.
-            </p>
-            
+          <div className="sf-hero-content" style={{ maxWidth: "800px" }}>
+            <h1 className="sf-hero-title">
+              {page.hero_title}{" "}
+              <span style={{ color: "var(--sf-yellow)" }}>{page.hero_highlight}</span>
+            </h1>
+            {page.hero_description && <p className="sf-hero-desc">{page.hero_description}</p>}
 
-
-            <div className="sf-hero-actions" style={{ marginTop: '40px' }}>
-              <Link href="/safety/training" className="sf-btn sf-btn--primary">
-                <span>Сургалтын хөтөлбөр</span>
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-              </Link>
-              <Link href="/safety/services" className="sf-btn sf-btn--outline">Бүх үйлчилгээ</Link>
+            <div className="sf-hero-actions" style={{ marginTop: "40px" }}>
+              {page.primary_button_text && page.primary_button_href && (
+                <Link href={page.primary_button_href} className="sf-btn sf-btn--primary">
+                  <span>{page.primary_button_text}</span>
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
+                  </svg>
+                </Link>
+              )}
+              {page.secondary_button_text && page.secondary_button_href && (
+                <Link href={page.secondary_button_href} className="sf-btn sf-btn--outline">
+                  {page.secondary_button_text}
+                </Link>
+              )}
             </div>
           </div>
         </div>
       </section>
 
-
-
-      {/* Latest News */}
       <section className="sf-block sf-block--alt">
         <div className="sf-container">
-          <div className="sf-section-top sf-reveal" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          <div
+            className="sf-section-top sf-reveal"
+            style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}
+          >
             <div>
-              <span className="sf-tag">Мэдээ мэдээлэл</span>
-              <h2>Сүүлийн үеийн <span className="sf-gradient-text">онцлох</span></h2>
+              {page.section_tag && <span className="sf-tag">{page.section_tag}</span>}
+              <h2>
+                {page.section_title} <span className="sf-gradient-text">{page.section_highlight}</span>
+              </h2>
             </div>
-            <Link href="/safety/news" className="sf-btn sf-btn--outline" style={{ display: 'none' }}>Бүх мэдээ</Link> {/* Can display flex on larger screens */}
           </div>
-          
+
           <div className="sf-news-layout">
-            {/* News List */}
             <div className="sf-news-list">
               {latestNews.map((news, index) => (
-                <div key={news.id} className="sf-news-item sf-news-item--horizontal sf-reveal" style={{ transitionDelay: `${index * 100}ms` }}>
+                <Link
+                  key={news.id}
+                  href={`/safety/news/${news.id}`}
+                  className="sf-news-item sf-news-item--horizontal sf-reveal"
+                  style={{ transitionDelay: `${index * 100}ms` }}
+                >
                   <div className="sf-news-image">
-                    <Image src={news.image} alt={news.title} fill style={{ objectFit: 'cover' }} />
+                    <Image src={news.image} alt={news.title} fill style={{ objectFit: "cover" }} />
                   </div>
                   <div className="sf-news-content">
                     <span className="sf-news-date">{news.date}</span>
                     <h3 className="sf-news-title">{news.title}</h3>
-                    <p className="sf-news-desc">{news.desc}</p>
-                    <Link href={`/safety/news`} className="sf-news-link">Цааш унших →</Link>
+                    <p className="sf-news-desc">{news.description}</p>
+                    <span className="sf-news-link">Цааш унших →</span>
                   </div>
-                </div>
+                </Link>
               ))}
-              <div style={{ textAlign: 'center', marginTop: '20px' }} className="sf-reveal">
-                 <Link href="/safety/news" className="sf-btn sf-btn--outline">Бүх мэдээллийг үзэх</Link>
+              <div style={{ textAlign: "center", marginTop: "20px" }} className="sf-reveal">
+                <Link href="/safety/news" className="sf-btn sf-btn--outline">
+                  Бүх мэдээллийг үзэх
+                </Link>
               </div>
             </div>
 
-            {/* Sidebar / Weather */}
             <div className="sf-sidebar sf-reveal">
-              <div className="sf-weather-widget" style={{ marginTop: 0, flexDirection: 'column', alignItems: 'flex-start' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
-                  <div className="sf-weather-icon">🌤️</div>
-                  <div>
-                    <span className="sf-weather-temp" style={{ display: 'block', lineHeight: 1 }}>{weather.temp}</span>
-                    <span style={{ fontWeight: '700', fontSize: '18px' }}>Дархан хот</span>
+              <article className="sf-weather-card">
+                <div className="sf-weather-card__orb sf-weather-card__orb--a" aria-hidden="true" />
+                <div className="sf-weather-card__orb sf-weather-card__orb--b" aria-hidden="true" />
+
+                <header className="sf-weather-card__top">
+                  <span className="sf-weather-card__badge">
+                    <span className="sf-weather-card__dot" aria-hidden="true" />
+                    Өнөөдөр
+                  </span>
+                  <span className="sf-weather-card__city">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                    {weather.weatherCity}
+                  </span>
+                </header>
+
+                <div className="sf-weather-card__hero">
+                  <div className="sf-weather-card__icon-wrap" aria-hidden="true">
+                    <div className="sf-weather-card__rays" />
+                    <span className="sf-weather-card__icon">{weather.weatherIcon}</span>
+                  </div>
+                  <div className="sf-weather-card__main">
+                    <span className="sf-weather-card__temp">{weather.weatherTemp}</span>
+                    <span className="sf-weather-card__condition">{weather.weatherCondition}</span>
                   </div>
                 </div>
-                <div className="sf-weather-details" style={{ flexDirection: 'column', gap: '8px' }}>
-                  <span>{weather.condition}</span>
-                  <span>{weather.wind}</span>
-                  <span>{weather.humidity}</span>
+
+                <div className="sf-weather-card__divider" aria-hidden="true" />
+
+                <div className="sf-weather-card__stats">
+                  <div className="sf-weather-card__stat">
+                    <div className="sf-weather-card__stat-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2" />
+                      </svg>
+                    </div>
+                    <div className="sf-weather-card__stat-text">
+                      <span className="sf-weather-card__stat-label">Салхи</span>
+                      <span className="sf-weather-card__stat-value">{metricValue(weather.weatherWind)}</span>
+                    </div>
+                  </div>
+
+                  <div className="sf-weather-card__stat">
+                    <div className="sf-weather-card__stat-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z" />
+                      </svg>
+                    </div>
+                    <div className="sf-weather-card__stat-text">
+                      <span className="sf-weather-card__stat-label">Чийгшил</span>
+                      <span className="sf-weather-card__stat-value">{metricValue(weather.weatherHumidity)}</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </article>
             </div>
           </div>
         </div>

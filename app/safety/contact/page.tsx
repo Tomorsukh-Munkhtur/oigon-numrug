@@ -1,18 +1,32 @@
-"use client";
-
 import Image from "next/image";
 import type { CSSProperties } from "react";
+import { getSafetyPage, getSafetySettings } from "@/lib/safety/content";
+
+export const dynamic = "force-dynamic";
 
 export default function SafetyContactPage() {
+  const page = getSafetyPage("contact");
+  const settings = getSafetySettings();
+
   return (
     <>
-      <section className="sf-hero sf-hero--mini" style={{ height: '40vh', minHeight: '300px' }}>
-        <Image src="/real-estate-bg.jpg" alt="Contact OHS" fill priority sizes="100vw" className="sf-hero-image" />
+      <section className="sf-hero sf-hero--mini" style={{ height: "40vh", minHeight: "300px" }}>
+        <Image
+          src={page.hero_image || "/real-estate-bg.jpg"}
+          alt="Contact OHS"
+          fill
+          priority
+          sizes="100vw"
+          className="sf-hero-image"
+        />
         <div className="sf-hero-overlay" />
         <div className="sf-container">
           <div className="sf-hero-content">
-            <span className="sf-tag">Холбоо барих</span>
-            <h1 className="sf-hero-title" style={{ fontSize: '48px' }}>Бидэнтэй <span style={{ color: 'var(--sf-yellow)' }}>холбогдоно уу</span></h1>
+            {page.hero_tag && <span className="sf-tag">{page.hero_tag}</span>}
+            <h1 className="sf-hero-title" style={{ fontSize: "48px" }}>
+              {page.hero_title}{" "}
+              <span style={{ color: "var(--sf-yellow)" }}>{page.hero_highlight}</span>
+            </h1>
           </div>
         </div>
       </section>
@@ -20,34 +34,56 @@ export default function SafetyContactPage() {
       <section className="sf-block">
         <div className="sf-container">
           <div className="sf-section-top sf-reveal">
-            <span className="sf-tag">Мэдээлэл</span>
-            <h2>Шуурхай <span className="sf-gradient-text">холбоо барих</span></h2>
-            <p className="sf-subtitle">Та аюулгүй ажиллагааны зөвлөгөө авах эсвэл хамтран ажиллах хүсэлтээ илгээнэ үү.</p>
+            {page.section_tag && <span className="sf-tag">{page.section_tag}</span>}
+            <h2>
+              {page.section_title} <span className="sf-gradient-text">{page.section_highlight}</span>
+            </h2>
+            {page.section_description && <p className="sf-subtitle">{page.section_description}</p>}
           </div>
 
-          <div className="sf-contact-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px', marginTop: '60px' }}>
+          <div
+            className="sf-contact-grid"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+              gap: "40px",
+              marginTop: "60px",
+            }}
+          >
             <div className="sf-card sf-reveal">
-              <div className="sf-card-stripe" style={{ '--accent': '#FF9800' } as CSSProperties} />
-              <div className="sf-icon-wrap" style={{ fontSize: '32px', marginBottom: '20px' }}>📞</div>
+              <div className="sf-card-stripe" style={{ "--accent": "#FF9800" } as CSSProperties} />
+              <div className="sf-icon-wrap" style={{ fontSize: "32px", marginBottom: "20px" }}>
+                📞
+              </div>
               <h3>Утас</h3>
-              <p style={{ fontSize: '18px', fontWeight: '600', color: 'var(--sf-dark)' }}>+976 8800 0000</p>
-              <p style={{ opacity: 0.7 }}>Ажлын цагаар холбогдоно уу.</p>
+              <p style={{ fontSize: "18px", fontWeight: "600", color: "var(--sf-dark)" }}>
+                {settings.contact_phone}
+              </p>
+              <p style={{ opacity: 0.7 }}>{settings.contact_phone_note}</p>
             </div>
 
-            <div className="sf-card sf-reveal" style={{ transitionDelay: '100ms' }}>
-              <div className="sf-card-stripe" style={{ '--accent': '#2196F3' } as CSSProperties} />
-              <div className="sf-icon-wrap" style={{ fontSize: '32px', marginBottom: '20px' }}>✉️</div>
+            <div className="sf-card sf-reveal" style={{ transitionDelay: "100ms" }}>
+              <div className="sf-card-stripe" style={{ "--accent": "#2196F3" } as CSSProperties} />
+              <div className="sf-icon-wrap" style={{ fontSize: "32px", marginBottom: "20px" }}>
+                ✉️
+              </div>
               <h3>И-мэйл</h3>
-              <p style={{ fontSize: '18px', fontWeight: '600', color: 'var(--sf-dark)' }}>safety@oigonnumrug.mn</p>
-              <p style={{ opacity: 0.7 }}>Бид 24 цагийн дотор хариулах болно.</p>
+              <p style={{ fontSize: "18px", fontWeight: "600", color: "var(--sf-dark)" }}>
+                {settings.contact_email}
+              </p>
+              <p style={{ opacity: 0.7 }}>{settings.contact_email_note}</p>
             </div>
 
-            <div className="sf-card sf-reveal" style={{ transitionDelay: '200ms' }}>
-              <div className="sf-card-stripe" style={{ '--accent': '#4CAF50' } as CSSProperties} />
-              <div className="sf-icon-wrap" style={{ fontSize: '32px', marginBottom: '20px' }}>📍</div>
+            <div className="sf-card sf-reveal" style={{ transitionDelay: "200ms" }}>
+              <div className="sf-card-stripe" style={{ "--accent": "#4CAF50" } as CSSProperties} />
+              <div className="sf-icon-wrap" style={{ fontSize: "32px", marginBottom: "20px" }}>
+                📍
+              </div>
               <h3>Хаяг</h3>
-              <p style={{ fontSize: '18px', fontWeight: '600', color: 'var(--sf-dark)' }}>Улаанбаатар хот, Сүхбаатар дүүрэг</p>
-              <p style={{ opacity: 0.7 }}>Ойгон Нөмрөг Төв байр</p>
+              <p style={{ fontSize: "18px", fontWeight: "600", color: "var(--sf-dark)" }}>
+                {settings.contact_address}
+              </p>
+              <p style={{ opacity: 0.7 }}>{settings.contact_address_note}</p>
             </div>
           </div>
         </div>
