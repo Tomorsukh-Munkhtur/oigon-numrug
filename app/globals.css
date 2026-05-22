@@ -1041,13 +1041,6 @@ a {
   margin-bottom: 18px;
 }
 
-.sf-tag--light {
-  color: #666;
-  background: #f0f0f0;
-  padding: 6px 14px;
-  border-radius: 6px;
-}
-
 .sf-about h2 {
   font-size: 52px;
   line-height: 1.15;
@@ -1547,13 +1540,6 @@ a {
   margin-bottom: 20px;
 }
 
-.sf-tag--light {
-  color: var(--sf-yellow);
-  background: rgba(255, 255, 255, 0.1);
-  padding: 6px 16px;
-  border-radius: 6px;
-}
-
 .sf-about h2 {
   font-size: 54px;
   line-height: 1.15;
@@ -1767,69 +1753,6 @@ a {
 .sf-link:hover {
   gap: 16px;
   color: var(--sf-orange);
-}
-
-.sf-cta {
-  padding: 120px 0;
-  background: var(--sf-page-bg);
-}
-
-.sf-cta-inner {
-  background: linear-gradient(135deg, #263238 0%, #161e22 100%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  padding: 80px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 40px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.3);
-}
-
-.sf-cta-text h2 {
-  font-size: 54px;
-  margin-bottom: 40px;
-  color: #fff;
-}
-
-.sf-contact-row {
-  display: flex;
-  gap: 40px;
-  flex-wrap: wrap;
-}
-
-.sf-contact-chip {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.sf-contact-chip span {
-  width: 50px;
-  height: 50px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  color: #fff;
-}
-
-.sf-contact-chip small {
-  display: block;
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 12px;
-  text-transform: uppercase;
-  font-weight: 800;
-  letter-spacing: 1px;
-}
-
-.sf-contact-chip strong {
-  font-size: 18px;
-  color: #fff;
 }
 
 .sf-footer {
@@ -2578,15 +2501,6 @@ a {
     grid-template-columns: 1fr;
     gap: 60px;
   }
-  .sf-cta-inner {
-    flex-direction: column;
-    text-align: center;
-    padding: 60px 40px;
-  }
-  .sf-contact-row {
-    justify-content: center;
-    gap: 30px;
-  }
   .sf-nav-links {
     display: none;
   }
@@ -2665,15 +2579,8 @@ a {
     width: 100%;
     justify-content: center;
   }
-  .sf-cta-text h2 {
-    font-size: 32px;
-  }
   .sf-nav-logo {
     height: 32px;
-  }
-  .sf-contact-row {
-    flex-direction: column;
-    align-items: center;
   }
 }
 

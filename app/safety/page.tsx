@@ -64,11 +64,6 @@ export default function SafetyPage() {
                   </svg>
                 </Link>
               )}
-              {page.secondary_button_text && page.secondary_button_href && (
-                <Link href={page.secondary_button_href} className="sf-btn sf-btn--outline">
-                  {page.secondary_button_text}
-                </Link>
-              )}
             </div>
           </div>
         </div>

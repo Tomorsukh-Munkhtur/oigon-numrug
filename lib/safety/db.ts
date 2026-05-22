@@ -135,24 +135,6 @@ function migrate(db: DatabaseSync) {
       created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES safety_admin_users(id) ON DELETE CASCADE
     );
-
-    CREATE TABLE IF NOT EXISTS safety_contact_submissions (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      email TEXT NOT NULL DEFAULT '',
-      phone TEXT NOT NULL DEFAULT '',
-      organization TEXT NOT NULL DEFAULT '',
-      subject TEXT NOT NULL DEFAULT '',
-      message TEXT NOT NULL,
-      status TEXT NOT NULL DEFAULT 'new',
-      ip TEXT NOT NULL DEFAULT '',
-      user_agent TEXT NOT NULL DEFAULT '',
-      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-    );
-
-    CREATE INDEX IF NOT EXISTS idx_safety_contact_status
-      ON safety_contact_submissions(status, created_at DESC);
   `);
 
   ensureColumn(db, "safety_news", "body", "TEXT NOT NULL DEFAULT ''");

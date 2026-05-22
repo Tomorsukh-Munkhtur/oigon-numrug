@@ -157,12 +157,9 @@ export async function updatePageContent(slug: string, formData: FormData) {
         section_highlight = ?,
         section_description = ?,
         body = ?,
-        secondary_body = ?,
         visual_image = ?,
         primary_button_text = ?,
         primary_button_href = ?,
-        secondary_button_text = ?,
-        secondary_button_href = ?,
         extra_json = ?,
         updated_at = CURRENT_TIMESTAMP
       WHERE slug = ?
@@ -179,12 +176,9 @@ export async function updatePageContent(slug: string, formData: FormData) {
       text(formData, "section_highlight"),
       text(formData, "section_description"),
       text(formData, "body"),
-      text(formData, "secondary_body"),
       await imageValue(formData, "visual_image", "visual_image_file", current?.visual_image),
       text(formData, "primary_button_text"),
       text(formData, "primary_button_href"),
-      text(formData, "secondary_button_text"),
-      text(formData, "secondary_button_href"),
       JSON.stringify(extra),
       slug
     );

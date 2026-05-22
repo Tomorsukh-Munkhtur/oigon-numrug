@@ -39,8 +39,6 @@ const ALL_TEXT_FIELDS = [
   "visual_image",
   "primary_button_text",
   "primary_button_href",
-  "secondary_button_text",
-  "secondary_button_href",
 ] as const;
 
 type FieldName = (typeof ALL_TEXT_FIELDS)[number];
@@ -58,7 +56,6 @@ function PreserveFields({
       {ALL_TEXT_FIELDS.filter((field) => !omitted.has(field)).map((field) => (
         <input key={field} type="hidden" name={field} value={page[field] ?? ""} />
       ))}
-      <input type="hidden" name="secondary_body" value="" />
     </>
   );
 }
@@ -142,22 +139,17 @@ function HomeEditor({ page }: { page: SafetyPageContent }) {
 
         <div className="admin-grid-2">
           <label>
-            Primary button text
+            Товчны текст
             <input name="primary_button_text" defaultValue={page.primary_button_text} />
           </label>
           <label>
-            Primary button link
+            Товчны линк
             <input name="primary_button_href" defaultValue={page.primary_button_href} />
           </label>
-          <label>
-            Secondary button text
-            <input name="secondary_button_text" defaultValue={page.secondary_button_text} />
-          </label>
-          <label>
-            Secondary button link
-            <input name="secondary_button_href" defaultValue={page.secondary_button_href} />
-          </label>
         </div>
+        <p className="admin-hint">
+          Жнь: текст “Бүх үйлчилгээ”, линк <code>/safety/services</code>.
+        </p>
       </fieldset>
 
       <PreserveFields
@@ -169,8 +161,6 @@ function HomeEditor({ page }: { page: SafetyPageContent }) {
           "hero_description",
           "primary_button_text",
           "primary_button_href",
-          "secondary_button_text",
-          "secondary_button_href",
         ]}
       />
       <input type="hidden" name="weatherIcon" value={homeExtra.weatherIcon} />
