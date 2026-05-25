@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="4 өрөө байрны зураг">
+  <rect width="800" height="600" fill="#f5f1e8"/>
+  <g fill="none" stroke="#0b1220" stroke-width="6" stroke-linejoin="round">
+    <rect x="60" y="60" width="680" height="480"/>
+    <line x1="280" y1="60" x2="280" y2="540"/>
+    <line x1="520" y1="60" x2="520" y2="540"/>
+    <line x1="60" y1="300" x2="280" y2="300"/>
+    <line x1="280" y1="300" x2="520" y2="300"/>
+    <line x1="520" y1="300" x2="740" y2="300"/>
+  </g>
+  <g stroke="#f5f1e8" stroke-width="10">
+    <line x1="180" y1="300" x2="240" y2="300"/>
+    <line x1="280" y1="160" x2="280" y2="220"/>
+    <line x1="520" y1="160" x2="520" y2="220"/>
+    <line x1="280" y1="400" x2="280" y2="460"/>
+    <line x1="520" y1="400" x2="520" y2="460"/>
+    <line x1="640" y1="300" x2="700" y2="300"/>
+  </g>
+  <g fill="none" stroke="#0b1220" stroke-width="3">
+    <path d="M 180 300 A 60 60 0 0 1 240 360"/>
+    <path d="M 280 160 A 60 60 0 0 0 220 220"/>
+    <path d="M 520 160 A 60 60 0 0 1 580 220"/>
+    <path d="M 280 400 A 60 60 0 0 0 220 460"/>
+    <path d="M 520 400 A 60 60 0 0 1 580 460"/>
+    <path d="M 640 300 A 60 60 0 0 0 700 360"/>
+  </g>
+  <g font-family="ui-sans-serif, system-ui, sans-serif" font-size="19" font-weight="700" fill="#0b1220" text-anchor="middle">
+    <text x="170" y="170">УНТЛАГА 1</text>
+    <text x="170" y="200" font-size="14" fill="#5b6473">22.4 м²</text>
+    <text x="400" y="170">ХООЛНЫ ӨРӨӨ</text>
+    <text x="400" y="200" font-size="14" fill="#5b6473">19.8 м²</text>
+    <text x="630" y="170">УНТЛАГА 2</text>
+    <text x="630" y="200" font-size="14" fill="#5b6473">16.4 м²</text>
+    <text x="170" y="420">УНТЛАГА 3</text>
+    <text x="170" y="450" font-size="14" fill="#5b6473">14.2 м²</text>
+    <text x="400" y="420">ЗОЧНЫ ӨРӨӨ</text>
+    <text x="400" y="450" font-size="14" fill="#5b6473">38.6 м²</text>
+    <text x="630" y="420">ГАЛ ТОГОО · УГ.</text>
+    <text x="630" y="450" font-size="14" fill="#5b6473">21.4 м²</text>
+  </g>
+  <g font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#5b6473">
+    <text x="60" y="40">4 өрөө · 162.8 м²</text>
+    <text x="740" y="40" text-anchor="end">Дархан · OIGON NUMRUG</text>
+  </g>
+</svg>

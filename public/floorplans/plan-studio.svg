@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Студи байрны зураг">
+  <rect width="800" height="600" fill="#f5f1e8"/>
+  <g fill="none" stroke="#0b1220" stroke-width="6" stroke-linejoin="round">
+    <rect x="80" y="80" width="640" height="440"/>
+    <line x1="80" y1="340" x2="320" y2="340"/>
+    <line x1="320" y1="80" x2="320" y2="340"/>
+  </g>
+  <g stroke="#f5f1e8" stroke-width="10">
+    <line x1="220" y1="340" x2="280" y2="340"/>
+    <line x1="320" y1="180" x2="320" y2="240"/>
+  </g>
+  <g fill="none" stroke="#0b1220" stroke-width="3">
+    <path d="M 220 340 A 60 60 0 0 1 280 400"/>
+    <path d="M 320 180 A 60 60 0 0 0 260 240"/>
+  </g>
+  <g font-family="ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="700" fill="#0b1220" text-anchor="middle">
+    <text x="200" y="200">УГААЛГА · ТАМБУР</text>
+    <text x="200" y="230" font-size="14" fill="#5b6473">7.8 м²</text>
+    <text x="520" y="200">ОРОЛТ · ГАЛ ТОГОО</text>
+    <text x="520" y="230" font-size="14" fill="#5b6473">11.4 м²</text>
+    <text x="400" y="430">УНТЛАГА · ЗОЧНЫ ОРОН ЗАЙ</text>
+    <text x="400" y="460" font-size="14" fill="#5b6473">22.6 м²</text>
+  </g>
+  <g font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#5b6473">
+    <text x="80" y="60">Студи · 41.8 м²</text>
+    <text x="720" y="60" text-anchor="end">Дархан · OIGON NUMRUG</text>
+  </g>
+</svg>

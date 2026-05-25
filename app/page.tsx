@@ -25,7 +25,7 @@ type Organization =
 const organizations: Organization[] = [
   {
     id: "real-estate",
-    logo: "/Logo_Primary color - 2.png",
+    logo: "/Logo_White color - 2.png",
     logoAlt: "Oigon Numrug Properties",
     background: "/real-estate-bg.jpg",
     description:

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="2 өрөө байрны зураг">
+  <rect width="800" height="600" fill="#f5f1e8"/>
+  <g fill="none" stroke="#0b1220" stroke-width="6" stroke-linejoin="round">
+    <rect x="60" y="60" width="680" height="480"/>
+    <line x1="380" y1="60" x2="380" y2="540"/>
+    <line x1="60" y1="280" x2="380" y2="280"/>
+    <line x1="380" y1="340" x2="740" y2="340"/>
+    <line x1="560" y1="60" x2="560" y2="340"/>
+  </g>
+  <g stroke="#f5f1e8" stroke-width="10">
+    <line x1="180" y1="280" x2="240" y2="280"/>
+    <line x1="380" y1="160" x2="380" y2="220"/>
+    <line x1="380" y1="440" x2="380" y2="500"/>
+    <line x1="560" y1="160" x2="560" y2="220"/>
+    <line x1="640" y1="340" x2="700" y2="340"/>
+  </g>
+  <g fill="none" stroke="#0b1220" stroke-width="3">
+    <path d="M 180 280 A 60 60 0 0 1 240 340"/>
+    <path d="M 380 160 A 60 60 0 0 0 320 220"/>
+    <path d="M 380 440 A 60 60 0 0 1 320 500"/>
+    <path d="M 560 160 A 60 60 0 0 1 620 220"/>
+    <path d="M 640 340 A 60 60 0 0 0 700 400"/>
+  </g>
+  <g font-family="ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="700" fill="#0b1220" text-anchor="middle">
+    <text x="220" y="170">ЗОЧНЫ ӨРӨӨ</text>
+    <text x="220" y="200" font-size="14" fill="#5b6473">28.6 м²</text>
+    <text x="220" y="410">УНТЛАГА 1</text>
+    <text x="220" y="440" font-size="14" fill="#5b6473">16.4 м²</text>
+    <text x="470" y="200">УНТЛАГА 2</text>
+    <text x="470" y="230" font-size="14" fill="#5b6473">13.8 м²</text>
+    <text x="650" y="200">УГААЛГА</text>
+    <text x="650" y="230" font-size="14" fill="#5b6473">5.2 м²</text>
+    <text x="560" y="450">ГАЛ ТОГОО · ХООЛНЫ ӨРӨӨ</text>
+    <text x="560" y="480" font-size="14" fill="#5b6473">18.9 м²</text>
+  </g>
+  <g font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#5b6473">
+    <text x="60" y="40">2 өрөө · 82.9 м²</text>
+    <text x="740" y="40" text-anchor="end">Дархан · OIGON NUMRUG</text>
+  </g>
+</svg>

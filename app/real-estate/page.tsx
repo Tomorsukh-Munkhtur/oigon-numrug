@@ -1,225 +1,235 @@
 import Image from "next/image";
+import Link from "next/link";
+import { reProjects, reStats } from "@/lib/real-estate/content";
 
-const stats = [
-  { value: "12+", label: "хамтарсан төсөл" },
-  { value: "8 жил", label: "зах зээлийн туршлага" },
-  { value: "24/7", label: "хэрэглэгчийн зөвлөгөө" },
-];
+export default function RealEstateHomePage() {
+  const featuredProjects = reProjects.slice(0, 3);
 
-const services = [
-  "Борлуулалт, түрээсийн зөвлөгөө",
-  "Төслийн маркетинг ба зах зээлийн байршуулалт",
-  "Хөрөнгийн үнэлгээ, сонголтын судалгаа",
-  "Хөрөнгө оруулагч, худалдан авагчийн холболт",
-];
-
-const projects = [
-  {
-    title: "Noble Residence",
-    type: "Орон сууц",
-    location: "Улаанбаатар",
-    image: "/project-residence.jpg",
-    status: "Борлуулалтын хамтын ажиллагаа",
-  },
-  {
-    title: "Civic Office Hub",
-    type: "Оффис, үйлчилгээ",
-    location: "Хотын төв",
-    image: "/project-office.jpg",
-    status: "Түрээсийн зуучлал",
-  },
-  {
-    title: "Garden Village",
-    type: "Хотхон",
-    location: "Ногоон бүс",
-    image: "/project-garden.jpg",
-    status: "Зах зээлийн байршуулалт",
-  },
-];
-
-const team = [
-  {
-    name: "Борлуулалтын баг",
-    role: "Хэрэглэгчийн зөвлөгөө, сонголтын судалгаа",
-  },
-  {
-    name: "Төслийн баг",
-    role: "Төслийн мэдээлэл, төлөвлөлт, явцын зохион байгуулалт",
-  },
-  {
-    name: "Зах зээлийн баг",
-    role: "Үнийн судалгаа, байршуулалт, хөрөнгө оруулалтын зөвлөмж",
-  },
-];
-
-export default function RealEstatePage() {
   return (
-    <main className="real-page">
-      <nav className="real-nav" aria-label="Үл хөдлөхийн навигац">
-        <Image
-          src="/Logo_Primary color - 2.png"
-          alt="Oigon Numrug Properties"
-          width={720}
-          height={190}
-          priority
-          className="real-nav-logo"
-        />
-        <div className="real-nav-links">
-          <a href="#about">Бидний тухай</a>
-          <a href="#projects">Төслүүд</a>
-          <a href="#team">Хамт олон</a>
-          <a href="#contact" className="real-nav-cta">
-            Холбоо барих
-          </a>
-        </div>
-      </nav>
-
-      <section className="real-hero">
+    <>
+      <section className="re-hero">
         <Image
           src="/real-estate-bg.jpg"
           alt=""
           fill
           priority
           sizes="100vw"
-          className="real-hero-image"
+          className="re-hero-image"
         />
-        <div className="real-hero-overlay" aria-hidden="true" />
-        <div className="real-hero-content">
-          <p className="real-kicker">Oigon Numrug Properties</p>
-          <h1>Үл хөдлөх хөрөнгийн үнэ цэнийг зөв байршуулдаг түнш</h1>
-          <p className="real-hero-copy">
-            Орон сууц, оффис, үйлчилгээний талбай болон хөрөнгө оруулалтын
-            төслүүдэд борлуулалт, түрээс, зах зээлийн зөвлөгөөг нэг дор
-            хүргэнэ.
-          </p>
-          <div className="real-hero-actions">
-            <a href="#projects" className="real-primary-action">
-              Хамтарч буй төслүүд
-            </a>
-            <a href="#services" className="real-secondary-action">
-              Үйлчилгээ
-            </a>
+        <div className="re-hero-overlay" aria-hidden="true" />
+        <div className="re-hero-grid" aria-hidden="true" />
+
+        <div className="re-hero-inner">
+          <div className="re-hero-copy">
+            <span className="re-eyebrow">
+              <span className="re-eyebrow-dot" aria-hidden="true" />
+              Oigon Numrug Properties · Real Estate Advisory
+            </span>
+            <h1>
+              Үл хөдлөх хөрөнгийн <em>үнэ цэнийг</em>
+              <br />
+              мэдрэмжтэй, мэдээлэлтэй удирддаг түнш.
+            </h1>
+            <p className="re-hero-lead">
+              12 жил, 120+ төсөл, 3,400+ харилцагч. Бид орон сууц, оффис болон
+              арилжааны хөрөнгөд зориулсан зах зээлийн судалгаа, маркетинг,
+              зуучлал ба хөрөнгө оруулалтын зөвлөгөөг нэг цэгээс хүргэдэг.
+            </p>
+            <div className="re-hero-actions">
+              <Link href="/real-estate/projects" className="re-btn re-btn--primary">
+                Онцлох төслүүд
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M5 12h14M13 5l7 7-7 7" />
+                </svg>
+              </Link>
+              <Link href="/real-estate/news" className="re-btn re-btn--ghost">
+                Сүүлийн мэдээ
+              </Link>
+            </div>
+
+            <dl className="re-hero-trust">
+              <div>
+                <dt>Зах зээлд</dt>
+                <dd>12 жил</dd>
+              </div>
+              <div>
+                <dt>Гүйцэтгэсэн төсөл</dt>
+                <dd>120+</dd>
+              </div>
+              <div>
+                <dt>Зөвлөгөөний цаг</dt>
+                <dd>24/7</dd>
+              </div>
+            </dl>
+          </div>
+
+          <aside className="re-hero-card" aria-label="Үл хөдлөх хөрөнгийн зах зээлийн товч">
+            <header>
+              <span className="re-hero-card__pill">
+                <span className="re-pulse" aria-hidden="true" />
+                Зах зээлийн товч · 2026 II сар
+              </span>
+              <h2>Дархан хотын зах зээл</h2>
+            </header>
+
+            <div className="re-hero-card__rows">
+              <div className="re-hero-card__row">
+                <div>
+                  <span>Орон сууцны үнэ</span>
+                  <strong>3.2 сая ₮/м²</strong>
+                </div>
+                <span className="re-tag re-tag--up">▲ 6.8%</span>
+              </div>
+              <div className="re-hero-card__row">
+                <div>
+                  <span>А зэрэглэлийн оффис түрээс</span>
+                  <strong>41,200 ₮/м²</strong>
+                </div>
+                <span className="re-tag re-tag--up">▲ 4.2%</span>
+              </div>
+              <div className="re-hero-card__row">
+                <div>
+                  <span>Газрын дундаж үнэ</span>
+                  <strong>620,000 ₮/м²</strong>
+                </div>
+                <span className="re-tag re-tag--down">▼ 0.9%</span>
+              </div>
+            </div>
+
+            <footer>
+              <span>Эх сурвалж — манай дотоод судалгаа</span>
+              <Link href="/real-estate/news">Бүх тоймыг үзэх →</Link>
+            </footer>
+          </aside>
+        </div>
+
+        <div className="re-hero-marquee" aria-hidden="true">
+          <div className="re-hero-marquee__track">
+            {[
+              "Skyline Residence",
+              "Civic Office Tower",
+              "Garden Village",
+              "Darkhan Plaza",
+              "Northern Heights",
+              "Lakeside Residences",
+              "Capital Park",
+            ]
+              .concat([
+                "Skyline Residence",
+                "Civic Office Tower",
+                "Garden Village",
+                "Darkhan Plaza",
+                "Northern Heights",
+                "Lakeside Residences",
+                "Capital Park",
+              ])
+              .map((name, idx) => (
+                <span key={`${name}-${idx}`}>{name}</span>
+              ))}
           </div>
         </div>
       </section>
 
-      <section className="real-stats" aria-label="Товч үзүүлэлтүүд">
-        {stats.map((item) => (
-          <div key={item.label} className="real-stat">
-            <strong>{item.value}</strong>
-            <span>{item.label}</span>
-          </div>
-        ))}
-      </section>
-
-      <section className="real-section real-intro" id="about">
-        <div>
-          <p className="real-section-label">Бидний тухай</p>
-          <h2>Үл хөдлөхийн шийдвэрийг мэдээлэлтэй, тайван болгодог баг</h2>
-        </div>
-        <div className="real-intro-copy">
-          <p>
-            Бид үл хөдлөх хөрөнгийн шийдвэрийг зөв мэдээлэл, бодит зах зээлийн
-            өнцөг, цэгцтэй борлуулалтын явцаар дэмждэг. Хэрэглэгч бүрт
-            тохирсон сонголт санал болгож, төслийн эзэдтэй урт хугацааны
-            итгэлцэл дээр ажиллана.
-          </p>
-          <p>
-            Орон сууц, оффис, үйлчилгээний талбай, хөрөнгө оруулалтын
-            боломжуудыг нэг дор харьцуулж, худалдан авагч болон төслийн
-            эзэмшигчийн хэрэгцээг зөв холбохыг зорьдог.
-          </p>
-        </div>
-      </section>
-
-      <section className="real-section real-intro" id="services">
-        <div>
-          <p className="real-section-label">Үйлчилгээ</p>
-          <h2>Төслийн эхний уулзалтаас хаалтын гэрээ хүртэл</h2>
-        </div>
-        <div className="real-intro-copy">
-          <div className="real-service-list">
-            {services.map((service) => (
-              <span key={service}>{service}</span>
+      <section className="re-stats" aria-label="Гол үзүүлэлтүүд">
+        <div className="re-container">
+          <div className="re-stats-grid">
+            {reStats.map((item) => (
+              <div key={item.label} className="re-stat">
+                <strong>{item.value}</strong>
+                <span>{item.label}</span>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="real-section" id="projects">
-        <div className="real-section-heading">
-          <div>
-            <p className="real-section-label">Хамтарч ажиллаж буй</p>
-            <h2>Онцлох төслүүд</h2>
+      <section className="re-section re-projects">
+        <div className="re-container">
+          <div className="re-section-head re-section-head--with-cta">
+            <div>
+              <span className="re-eyebrow re-eyebrow--dark">
+                <span className="re-eyebrow-dot" aria-hidden="true" />
+                Онцлох портфолио
+              </span>
+              <h2>Хамтран ажиллаж буй сонгомол төслүүд</h2>
+              <p>
+                Бид төслийг зах зээлд эрсдэлгүй байршуулах, дуусгахаас өмнө
+                борлуулалтыг хурдасгахад мэргэшсэн.
+              </p>
+            </div>
+            <Link href="/real-estate/projects" className="re-section-head__cta">
+              Бүх төслийг үзэх
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M5 12h14M13 5l7 7-7 7" />
+              </svg>
+            </Link>
           </div>
-          <p>
-            Борлуулалт, түрээс, маркетингийн байршуулалтаар хамтран ажиллаж
-            буй төслүүдийн жишээ.
-          </p>
-        </div>
 
-        <div className="real-project-grid">
-          {projects.map((project) => (
-            <article key={project.title} className="real-project-card">
-              <div className="real-project-image">
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  fill
-                  sizes="(min-width: 900px) 33vw, 100vw"
-                  className="real-project-photo"
-                />
-                <span>{project.status}</span>
-              </div>
-              <div className="real-project-info">
-                <div>
-                  <h3>{project.title}</h3>
-                  <p>{project.type}</p>
+          <div className="re-project-grid">
+            {featuredProjects.map((project) => (
+              <Link
+                key={project.id}
+                href={`/real-estate/projects/${project.id}`}
+                className="re-project"
+                aria-label={`${project.title} төслийн мэдээлэл`}
+              >
+                <div className="re-project__media">
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    sizes="(min-width: 1100px) 33vw, (min-width: 700px) 50vw, 100vw"
+                    className="re-project__photo"
+                  />
+                  <div className="re-project__media-overlay" aria-hidden="true" />
+                  <span className="re-project__status">{project.status}</span>
                 </div>
-                <span>{project.location}</span>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="real-section" id="team">
-        <div className="real-section-heading">
-          <div>
-            <p className="real-section-label">Хамт олон</p>
-            <h2>Төслийн бүх шатанд нэг цэгийн зохион байгуулалт</h2>
-          </div>
-          <p>
-            Манай баг харилцагчийн хэрэгцээ, төслийн онцлог, зах зээлийн
-            өгөгдлийг нэгтгэн шийдвэр гаргалтыг илүү ойлгомжтой болгодог.
-          </p>
-        </div>
-
-        <div className="real-team-grid">
-          {team.map((member, index) => (
-            <article key={member.name} className="real-team-card">
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <h3>{member.name}</h3>
-              <p>{member.role}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="real-cta" id="contact">
-        <div>
-          <p className="real-section-label">Холбоо барих</p>
-          <h2>Төслөө зах зээлд зөв байршуулъя</h2>
-          <div className="real-contact-list">
-            <span>Утас: +976 0000 0000</span>
-            <span>И-мэйл: info@oigonnumrug.mn</span>
-            <span>Улаанбаатар хот</span>
+                <div className="re-project__body">
+                  <span className="re-project__type">{project.type}</span>
+                  <h3>{project.title}</h3>
+                  <p className="re-project__meta">
+                    <span>{project.location}</span>
+                    <span aria-hidden="true">·</span>
+                    <span>{project.price}</span>
+                  </p>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
-        <a href="tel:+97600000000" className="real-primary-action">
-          Холбогдох
-        </a>
       </section>
-    </main>
+
+      <section className="re-cta">
+        <div className="re-container re-cta-inner">
+          <div className="re-cta-copy">
+            <span className="re-eyebrow re-eyebrow--light">
+              <span className="re-eyebrow-dot" aria-hidden="true" />
+              Холбоо барих
+            </span>
+            <h2>
+              Төслөө зөв байршуулах,
+              <br />
+              шийдвэрээ итгэлтэй гаргах цаг.
+            </h2>
+            <p>
+              Эхний 30 минутын зөвлөгөөг үнэ төлбөргүй хүргэнэ — таны зорилго,
+              боломж, хязгаарлалтыг сонсож, дараагийн алхамыг тодорхой
+              төлөвлөж өгнө.
+            </p>
+            <div className="re-cta-actions">
+              <Link href="/real-estate/contact" className="re-btn re-btn--primary">
+                Зөвлөгөө захиалах
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M5 12h14M13 5l7 7-7 7" />
+                </svg>
+              </Link>
+              <Link href="/real-estate/about" className="re-btn re-btn--ghost">
+                Бидний тухай
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
