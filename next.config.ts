@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
+    // Self-hosted on EC2 — keep optimizer disabled so newly uploaded files
+    // are served directly from /public/uploads/* without the /_next/image
+    // pipeline (which can fail when Sharp is missing on the host).
+    unoptimized: true,
     remotePatterns: [
       { protocol: "https", hostname: "**" },
       { protocol: "http", hostname: "localhost" },

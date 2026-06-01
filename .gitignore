@@ -24,6 +24,8 @@
 /data/*.db
 /data/*.db-*
 /public/uploads/safety/*
+/public/uploads/real-estate/*
+!/public/uploads/real-estate/.gitkeep
 
 # misc
 .DS_Store
