@@ -1,17 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { reProjects } from "@/lib/real-estate/content";
+import { getProject, listProjects } from "@/lib/real-estate/content";
+
+export const dynamic = "force-dynamic";
 
 type Params = { id: string };
 
-export function generateStaticParams(): Params[] {
-  return reProjects.map((project) => ({ id: project.id }));
-}
-
 export async function generateMetadata({ params }: { params: Promise<Params> }) {
   const { id } = await params;
-  const project = reProjects.find((p) => p.id === id);
+  const project = getProject(id);
   if (!project) return { title: "Төсөл олдсонгүй" };
   return {
     title: `${project.title} — Oigon Numrug Properties`,
@@ -25,10 +23,12 @@ export default async function ProjectDetailPage({
   params: Promise<Params>;
 }) {
   const { id } = await params;
-  const project = reProjects.find((p) => p.id === id);
+  const project = getProject(id);
   if (!project) notFound();
 
-  const related = reProjects.filter((p) => p.id !== project.id).slice(0, 3);
+  const related = listProjects()
+    .filter((p) => p.id !== project.id)
+    .slice(0, 3);
 
   return (
     <>

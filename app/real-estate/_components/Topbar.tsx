@@ -3,7 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { reNavLinks } from "@/lib/real-estate/content";
+
+const navLinks = [
+  { href: "/real-estate/projects", label: "Төслүүд" },
+  { href: "/real-estate/about", label: "Бидний тухай" },
+  { href: "/real-estate/services", label: "Үйлчилгээ" },
+];
 
 export default function Topbar() {
   const pathname = usePathname();
@@ -23,7 +28,7 @@ export default function Topbar() {
         </Link>
 
         <nav className="re-nav" aria-label="Үндсэн навигац">
-          {reNavLinks.map((link) => {
+          {navLinks.map((link) => {
             const active =
               pathname === link.href ||
               (link.href !== "/real-estate" && pathname.startsWith(link.href));

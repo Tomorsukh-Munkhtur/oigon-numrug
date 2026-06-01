@@ -1500,6 +1500,23 @@ a {
   padding: 64px 0 88px;
 }
 
+.re-page-hero__image {
+  object-fit: cover;
+  object-position: 50% 50%;
+  z-index: -2;
+  opacity: 0.6;
+  filter: contrast(1.05) saturate(0.95);
+}
+
+.re-page-hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(120% 70% at 0% 0%, rgba(21, 36, 63, 0.85) 0%, rgba(11, 18, 32, 0.55) 45%, transparent 70%),
+    linear-gradient(180deg, rgba(11, 18, 32, 0.55) 0%, rgba(11, 18, 32, 0.85) 100%);
+}
+
 .re-page-hero__grid {
   position: absolute;
   inset: 0;
@@ -4642,6 +4659,511 @@ a {
 .sf-reveal.sf-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ---------- Real Estate admin: ImageField ---------- */
+.re-image-field {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.re-image-field__file {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.re-image-field__preview {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  border-radius: 14px;
+  background:
+    linear-gradient(45deg, #f1f5f9 25%, transparent 25%) 0 0 / 18px 18px,
+    linear-gradient(-45deg, #f1f5f9 25%, transparent 25%) 0 9px / 18px 18px,
+    linear-gradient(45deg, transparent 75%, #f1f5f9 75%) 9px -9px / 18px 18px,
+    linear-gradient(-45deg, transparent 75%, #f1f5f9 75%) -9px 0 / 18px 18px,
+    #ffffff;
+  border: 1px dashed #ccd5df;
+  overflow: hidden;
+}
+
+.re-image-field__preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.re-image-field__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.re-image-field__badge {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #0f1620;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  max-width: calc(100% - 24px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(15, 22, 32, 0.15);
+}
+
+.re-image-field__badge--soft {
+  background: rgba(255, 255, 255, 0.78);
+  font-weight: 600;
+  color: #475569;
+}
+
+.re-image-field__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.re-image-field__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  min-height: 40px;
+  border-radius: 10px;
+  border: 1px solid #ccd5df;
+  background: #ffffff;
+  color: #17202a;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+
+.re-image-field__btn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.re-image-field__btn--primary {
+  background: #17202a;
+  border-color: #17202a;
+  color: #fff;
+}
+
+.re-image-field__btn--primary:hover {
+  background: #0f1620;
+  border-color: #0f1620;
+}
+
+.re-image-field__btn--danger {
+  border-color: #f5c6c6;
+  color: #b42318;
+  background: #fff;
+}
+
+.re-image-field__btn--danger:hover {
+  background: #fff0f0;
+  border-color: #b42318;
+}
+
+.re-image-library {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #e5ebf0;
+  border-radius: 12px;
+  background: #f8fafc;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.re-image-library__empty {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 28px;
+  text-align: center;
+  color: #67768a;
+  font-style: italic;
+  font-size: 14px;
+}
+
+.re-image-library__item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.re-image-library__item:hover {
+  border-color: #ccd5df;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px -10px rgba(15, 22, 32, 0.18);
+}
+
+.re-image-library__item.is-active {
+  border-color: #fab617;
+  box-shadow: 0 0 0 4px rgba(250, 182, 23, 0.18);
+}
+
+.re-image-library__item img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+  background: #f1f5f9;
+}
+
+.re-image-library__item span {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #475569;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- Real Estate admin: GalleryField ---------- */
+.re-gallery-field {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.re-gallery-field__empty {
+  margin: 0;
+  padding: 22px 18px;
+  text-align: center;
+  border: 1px dashed #ccd5df;
+  border-radius: 12px;
+  color: #67768a;
+  font-size: 13.5px;
+  font-style: italic;
+  background: #f8fafc;
+}
+
+.re-gallery-selected {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.re-gallery-selected li {
+  display: grid;
+  grid-template-columns: 28px 64px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border: 1px solid #e5ebf0;
+  border-radius: 10px;
+  background: #fff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.re-gallery-selected li:hover {
+  border-color: #ccd5df;
+  box-shadow: 0 4px 12px -8px rgba(15, 22, 32, 0.18);
+}
+
+.re-gallery-selected__order {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.re-gallery-selected__media {
+  width: 64px;
+  height: 48px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #f1f5f9;
+}
+
+.re-gallery-selected__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.re-gallery-selected__name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #17202a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.re-gallery-selected__controls {
+  display: flex;
+  gap: 4px;
+}
+
+.re-gallery-selected__controls button {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ccd5df;
+  border-radius: 6px;
+  background: #fff;
+  color: #344150;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.re-gallery-selected__controls button:hover:not(:disabled) {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.re-gallery-selected__controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.re-gallery-selected__remove {
+  border-color: #f5c6c6 !important;
+  color: #b42318 !important;
+}
+
+.re-gallery-selected__remove:hover:not(:disabled) {
+  background: #fff0f0 !important;
+  border-color: #b42318 !important;
+}
+
+/* Checkmark badge on library items already in the gallery */
+.re-image-library__check {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fab617;
+  color: #111;
+  font-size: 13px;
+  font-weight: 900;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.re-image-library__item {
+  position: relative;
+}
+
+/* ---------- Real Estate admin: FloorPlanField ---------- */
+.re-floorplan-field {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.re-floorplan-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.re-floorplan-row-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.re-floorplan-row {
+  display: grid;
+  grid-template-columns: 28px 120px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border: 1px solid #e5ebf0;
+  border-radius: 12px;
+  background: #fff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.re-floorplan-row:hover {
+  border-color: #ccd5df;
+  box-shadow: 0 4px 12px -8px rgba(15, 22, 32, 0.18);
+}
+
+.re-floorplan-row__order {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.re-floorplan-row__thumb {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 120px;
+  height: 88px;
+  border-radius: 8px;
+  border: 1px dashed #ccd5df;
+  background: #f8fafc;
+  cursor: pointer;
+  overflow: hidden;
+  padding: 0;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: #67768a;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.re-floorplan-row__thumb:hover {
+  border-color: #94a3b8;
+  background: #fff;
+  color: #344150;
+}
+
+.re-floorplan-row__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #fff;
+  display: block;
+}
+
+.re-floorplan-row__fields {
+  display: grid;
+  grid-template-columns: 1fr 0.7fr 0.7fr;
+  gap: 10px;
+  min-width: 0;
+}
+
+.re-floorplan-row__fields label {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+}
+
+.re-floorplan-row__fields label span {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #67768a;
+}
+
+.re-floorplan-row__fields input {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid #ccd5df;
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+  font-weight: 500;
+  font-size: 13.5px;
+  color: #17202a;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.re-floorplan-row__fields input:focus {
+  outline: none;
+  border-color: #fab617;
+  background: #fffbef;
+}
+
+.re-floorplan-row__controls {
+  display: flex;
+  gap: 4px;
+}
+
+.re-floorplan-row__controls button {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ccd5df;
+  border-radius: 6px;
+  background: #fff;
+  color: #344150;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.re-floorplan-row__controls button:hover:not(:disabled) {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.re-floorplan-row__controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@media (max-width: 900px) {
+  .re-floorplan-row {
+    grid-template-columns: 28px 1fr;
+    grid-template-rows: auto auto;
+  }
+  .re-floorplan-row__thumb {
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 140px;
+  }
+  .re-floorplan-row__fields {
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr;
+  }
+  .re-floorplan-row__controls {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+  }
 }
 
 /* Safety admin */

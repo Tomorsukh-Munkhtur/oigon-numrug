@@ -1,15 +1,45 @@
 import Image from "next/image";
 import Link from "next/link";
-import { reProjects, reStats } from "@/lib/real-estate/content";
+import {
+  getHomeSettings,
+  listProjects,
+} from "@/lib/real-estate/content";
+
+export const dynamic = "force-dynamic";
 
 export default function RealEstateHomePage() {
-  const featuredProjects = reProjects.slice(0, 3);
+  const s = getHomeSettings();
+  const featuredProjects = listProjects().slice(0, 3);
+  const marqueeRail = s.marqueeNames.length > 0
+    ? [...s.marqueeNames, ...s.marqueeNames]
+    : [];
+
+  const marketRows = [
+    {
+      label: s.marketRow1Label,
+      value: s.marketRow1Value,
+      delta: s.marketRow1Delta,
+      kind: s.marketRow1Kind,
+    },
+    {
+      label: s.marketRow2Label,
+      value: s.marketRow2Value,
+      delta: s.marketRow2Delta,
+      kind: s.marketRow2Kind,
+    },
+    {
+      label: s.marketRow3Label,
+      value: s.marketRow3Value,
+      delta: s.marketRow3Delta,
+      kind: s.marketRow3Kind,
+    },
+  ];
 
   return (
     <>
       <section className="re-hero">
         <Image
-          src="/real-estate-bg.jpg"
+          src={s.heroImage || "/real-estate-bg.jpg"}
           alt=""
           fill
           priority
@@ -23,42 +53,38 @@ export default function RealEstateHomePage() {
           <div className="re-hero-copy">
             <span className="re-eyebrow">
               <span className="re-eyebrow-dot" aria-hidden="true" />
-              Oigon Numrug Properties · Real Estate Advisory
+              {s.heroEyebrow}
             </span>
             <h1>
-              Үл хөдлөх хөрөнгийн <em>үнэ цэнийг</em>
+              {s.heroTitlePre} <em>{s.heroTitleEm}</em>
               <br />
-              мэдрэмжтэй, мэдээлэлтэй удирддаг түнш.
+              {s.heroTitlePost}
             </h1>
-            <p className="re-hero-lead">
-              12 жил, 120+ төсөл, 3,400+ харилцагч. Бид орон сууц, оффис болон
-              арилжааны хөрөнгөд зориулсан зах зээлийн судалгаа, маркетинг,
-              зуучлал ба хөрөнгө оруулалтын зөвлөгөөг нэг цэгээс хүргэдэг.
-            </p>
+            <p className="re-hero-lead">{s.heroLead}</p>
             <div className="re-hero-actions">
-              <Link href="/real-estate/projects" className="re-btn re-btn--primary">
-                Онцлох төслүүд
+              <Link href={s.heroPrimaryHref} className="re-btn re-btn--primary">
+                {s.heroPrimaryLabel}
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M5 12h14M13 5l7 7-7 7" />
                 </svg>
               </Link>
-              <Link href="/real-estate/news" className="re-btn re-btn--ghost">
-                Сүүлийн мэдээ
+              <Link href={s.heroSecondaryHref} className="re-btn re-btn--ghost">
+                {s.heroSecondaryLabel}
               </Link>
             </div>
 
             <dl className="re-hero-trust">
               <div>
-                <dt>Зах зээлд</dt>
-                <dd>12 жил</dd>
+                <dt>{s.trust1Label}</dt>
+                <dd>{s.trust1Value}</dd>
               </div>
               <div>
-                <dt>Гүйцэтгэсэн төсөл</dt>
-                <dd>120+</dd>
+                <dt>{s.trust2Label}</dt>
+                <dd>{s.trust2Value}</dd>
               </div>
               <div>
-                <dt>Зөвлөгөөний цаг</dt>
-                <dd>24/7</dd>
+                <dt>{s.trust3Label}</dt>
+                <dd>{s.trust3Value}</dd>
               </div>
             </dl>
           </div>
@@ -67,81 +93,58 @@ export default function RealEstateHomePage() {
             <header>
               <span className="re-hero-card__pill">
                 <span className="re-pulse" aria-hidden="true" />
-                Зах зээлийн товч · 2026 II сар
+                {s.marketPill}
               </span>
-              <h2>Дархан хотын зах зээл</h2>
+              <h2>{s.marketTitle}</h2>
             </header>
 
             <div className="re-hero-card__rows">
-              <div className="re-hero-card__row">
-                <div>
-                  <span>Орон сууцны үнэ</span>
-                  <strong>3.2 сая ₮/м²</strong>
+              {marketRows.map((row, idx) => (
+                <div key={idx} className="re-hero-card__row">
+                  <div>
+                    <span>{row.label}</span>
+                    <strong>{row.value}</strong>
+                  </div>
+                  <span
+                    className={`re-tag ${row.kind === "up" ? "re-tag--up" : "re-tag--down"}`}
+                  >
+                    {row.delta}
+                  </span>
                 </div>
-                <span className="re-tag re-tag--up">▲ 6.8%</span>
-              </div>
-              <div className="re-hero-card__row">
-                <div>
-                  <span>А зэрэглэлийн оффис түрээс</span>
-                  <strong>41,200 ₮/м²</strong>
-                </div>
-                <span className="re-tag re-tag--up">▲ 4.2%</span>
-              </div>
-              <div className="re-hero-card__row">
-                <div>
-                  <span>Газрын дундаж үнэ</span>
-                  <strong>620,000 ₮/м²</strong>
-                </div>
-                <span className="re-tag re-tag--down">▼ 0.9%</span>
-              </div>
+              ))}
             </div>
 
             <footer>
-              <span>Эх сурвалж — манай дотоод судалгаа</span>
-              <Link href="/real-estate/news">Бүх тоймыг үзэх →</Link>
+              <span>{s.marketFooter}</span>
             </footer>
           </aside>
         </div>
 
-        <div className="re-hero-marquee" aria-hidden="true">
-          <div className="re-hero-marquee__track">
-            {[
-              "Skyline Residence",
-              "Civic Office Tower",
-              "Garden Village",
-              "Darkhan Plaza",
-              "Northern Heights",
-              "Lakeside Residences",
-              "Capital Park",
-            ]
-              .concat([
-                "Skyline Residence",
-                "Civic Office Tower",
-                "Garden Village",
-                "Darkhan Plaza",
-                "Northern Heights",
-                "Lakeside Residences",
-                "Capital Park",
-              ])
-              .map((name, idx) => (
+        {marqueeRail.length > 0 && (
+          <div className="re-hero-marquee" aria-hidden="true">
+            <div className="re-hero-marquee__track">
+              {marqueeRail.map((name, idx) => (
                 <span key={`${name}-${idx}`}>{name}</span>
               ))}
+            </div>
           </div>
-        </div>
+        )}
       </section>
 
-      <section className="re-stats" aria-label="Гол үзүүлэлтүүд">
-        <div className="re-container">
-          <div className="re-stats-grid">
-            {reStats.map((item) => (
-              <div key={item.label} className="re-stat">
-                <strong>{item.value}</strong>
-                <span>{item.label}</span>
-              </div>
-            ))}
+      {s.stats.length > 0 && (
+        <section className="re-stats" aria-label="Гол үзүүлэлтүүд">
+          <div className="re-container">
+            <div className="re-stats-grid">
+              {s.stats.map((item, idx) => (
+                <div key={`${item.label}-${idx}`} className="re-stat">
+                  <strong>{item.value}</strong>
+                  <span>{item.label}</span>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="re-section re-projects">
         <div className="re-container">
@@ -149,13 +152,10 @@ export default function RealEstateHomePage() {
             <div>
               <span className="re-eyebrow re-eyebrow--dark">
                 <span className="re-eyebrow-dot" aria-hidden="true" />
-                Онцлох портфолио
+                {s.projectsEyebrow}
               </span>
-              <h2>Хамтран ажиллаж буй сонгомол төслүүд</h2>
-              <p>
-                Бид төслийг зах зээлд эрсдэлгүй байршуулах, дуусгахаас өмнө
-                борлуулалтыг хурдасгахад мэргэшсэн.
-              </p>
+              <h2>{s.projectsTitle}</h2>
+              <p>{s.projectsDescription}</p>
             </div>
             <Link href="/real-estate/projects" className="re-section-head__cta">
               Бүх төслийг үзэх
@@ -204,27 +204,23 @@ export default function RealEstateHomePage() {
           <div className="re-cta-copy">
             <span className="re-eyebrow re-eyebrow--light">
               <span className="re-eyebrow-dot" aria-hidden="true" />
-              Холбоо барих
+              {s.ctaEyebrow}
             </span>
             <h2>
-              Төслөө зөв байршуулах,
+              {s.ctaTitleLine1}
               <br />
-              шийдвэрээ итгэлтэй гаргах цаг.
+              {s.ctaTitleLine2}
             </h2>
-            <p>
-              Эхний 30 минутын зөвлөгөөг үнэ төлбөргүй хүргэнэ — таны зорилго,
-              боломж, хязгаарлалтыг сонсож, дараагийн алхамыг тодорхой
-              төлөвлөж өгнө.
-            </p>
+            <p>{s.ctaDescription}</p>
             <div className="re-cta-actions">
-              <Link href="/real-estate/contact" className="re-btn re-btn--primary">
-                Зөвлөгөө захиалах
+              <Link href={s.ctaPrimaryHref} className="re-btn re-btn--primary">
+                {s.ctaPrimaryLabel}
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M5 12h14M13 5l7 7-7 7" />
                 </svg>
               </Link>
-              <Link href="/real-estate/about" className="re-btn re-btn--ghost">
-                Бидний тухай
+              <Link href={s.ctaSecondaryHref} className="re-btn re-btn--ghost">
+                {s.ctaSecondaryLabel}
               </Link>
             </div>
           </div>

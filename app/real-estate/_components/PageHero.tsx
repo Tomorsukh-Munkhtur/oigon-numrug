@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 type Crumb = { href: string; label: string };
@@ -7,11 +8,30 @@ type PageHeroProps = {
   title: React.ReactNode;
   description?: React.ReactNode;
   crumbs?: Crumb[];
+  /** Optional background image override; falls back to gradient when empty. */
+  image?: string;
 };
 
-export default function PageHero({ eyebrow, title, description, crumbs }: PageHeroProps) {
+export default function PageHero({
+  eyebrow,
+  title,
+  description,
+  crumbs,
+  image,
+}: PageHeroProps) {
   return (
-    <section className="re-page-hero">
+    <section className={`re-page-hero ${image ? "re-page-hero--image" : ""}`}>
+      {image && (
+        <Image
+          src={image}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="re-page-hero__image"
+        />
+      )}
+      {image && <div className="re-page-hero__overlay" aria-hidden="true" />}
       <div className="re-page-hero__grid" aria-hidden="true" />
       <div className="re-container re-page-hero__inner">
         {crumbs && crumbs.length > 0 && (

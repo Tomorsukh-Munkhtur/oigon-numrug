@@ -30,7 +30,6 @@ export default function Footer() {
             <h4>Компани</h4>
             <Link href="/real-estate/about">Бидний тухай</Link>
             <Link href="/real-estate/projects">Төслүүд</Link>
-            <Link href="/real-estate/news">Мэдээ ба тойм</Link>
             <Link href="/real-estate/contact">Холбоо барих</Link>
           </div>
           <div>

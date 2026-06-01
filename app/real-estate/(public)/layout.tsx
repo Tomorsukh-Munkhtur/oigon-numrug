@@ -1,5 +1,5 @@
-import Footer from "./_components/Footer";
-import Topbar from "./_components/Topbar";
+import Footer from "../_components/Footer";
+import Topbar from "../_components/Topbar";
 
 export default function RealEstateLayout({
   children,

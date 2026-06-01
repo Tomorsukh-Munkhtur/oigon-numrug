@@ -1,13 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
-import PageHero from "../_components/PageHero";
-import { reProjects } from "@/lib/real-estate/content";
+import PageHero from "../../_components/PageHero";
+import { listProjects } from "@/lib/real-estate/content";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Төслүүд — Oigon Numrug Properties",
 };
 
 export default function ProjectsPage() {
+  const reProjects = listProjects();
+
   return (
     <>
       <PageHero
