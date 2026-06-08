@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import {
   getHomeSettings,
   listProjects,
@@ -7,12 +8,48 @@ import {
 
 export const dynamic = "force-dynamic";
 
+export const metadata: Metadata = {
+  title: "Үл хөдлөх хөрөнгийн зуучлал, маркетинг — Дархан",
+  description:
+    "Oigon Numrug Properties — Дархан хотын үл хөдлөх хөрөнгийн зуучлал, төслийн маркетинг, зөвлөгөө. 12 жилийн туршлага, 120+ төсөл, 3,400+ харилцагч.",
+  alternates: { canonical: "/real-estate" },
+  openGraph: {
+    title: "Үл хөдлөх хөрөнгийн зуучлал, маркетинг — Дархан",
+    description:
+      "Oigon Numrug Properties — Дархан хотын үл хөдлөх хөрөнгийн зуучлал, төслийн маркетинг, зөвлөгөө.",
+    url: "/real-estate",
+    images: ["/real-estate-bg.jpg"],
+  },
+};
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://oigonnumrug.mn";
+
 export default function RealEstateHomePage() {
   const s = getHomeSettings();
   const featuredProjects = listProjects().slice(0, 3);
   const marqueeRail = s.marqueeNames.length > 0
     ? [...s.marqueeNames, ...s.marqueeNames]
     : [];
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "RealEstateAgent",
+    name: "Oigon Numrug Properties",
+    alternateName: "Ойгон Нөмрөг",
+    url: `${SITE_URL}/real-estate`,
+    logo: `${SITE_URL}/Logo_Primary color - 2.png`,
+    image: `${SITE_URL}/real-estate-bg.jpg`,
+    description:
+      "Дархан хотын үл хөдлөх хөрөнгийн зуучлал, төслийн маркетинг, зөвлөгөө үзүүлэгч компани.",
+    areaServed: { "@type": "City", name: "Darkhan" },
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Дархан",
+      addressRegion: "Дархан-Уул",
+      addressCountry: "MN",
+    },
+    sameAs: [`${SITE_URL}/real-estate`],
+  };
 
   const marketRows = [
     {
@@ -37,6 +74,10 @@ export default function RealEstateHomePage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <section className="re-hero">
         <Image
           src={s.heroImage || "/real-estate-bg.jpg"}

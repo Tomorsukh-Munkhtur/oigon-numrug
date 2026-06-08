@@ -7,7 +7,15 @@ import {
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Холбоо барих — Oigon Numrug Properties",
+  title: "Холбоо барих",
+  description:
+    "Дархан хот дахь Oigon Numrug Properties-тэй утсаар, и-мэйлээр, эсвэл оффис дээр уулзаж холбогдох.",
+  alternates: { canonical: "/real-estate/contact" },
+  openGraph: {
+    title: "Холбоо барих — Oigon Numrug Properties",
+    description: "Дархан хотын үл хөдлөх хөрөнгийн зөвлөхтэй холбогдох.",
+    url: "/real-estate/contact",
+  },
 };
 
 function ChannelIcon({ kind }: { kind: ContactChannelKind }) {

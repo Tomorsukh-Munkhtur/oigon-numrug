@@ -5,7 +5,15 @@ import { getAboutSettings, reStats } from "@/lib/real-estate/content";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Бидний тухай — Oigon Numrug Properties",
+  title: "Бидний тухай",
+  description:
+    "Дархан хотын үл хөдлөх хөрөнгийн зөвлөх Oigon Numrug Properties — 12 жилийн туршлага, тоо баримтанд тулгуурласан, хүн төвтэй зөвлөгөө.",
+  alternates: { canonical: "/real-estate/about" },
+  openGraph: {
+    title: "Бидний тухай — Oigon Numrug Properties",
+    description: "Дархан хотын үл хөдлөх хөрөнгийн хараат бус зөвлөх баг.",
+    url: "/real-estate/about",
+  },
 };
 
 export default function AboutPage() {

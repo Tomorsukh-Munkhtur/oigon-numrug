@@ -5,7 +5,15 @@ import { getServicesSettings } from "@/lib/real-estate/content";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Үйлчилгээ — Oigon Numrug Properties",
+  title: "Үйлчилгээ",
+  description:
+    "Дархан хотын үл хөдлөх хөрөнгийн борлуулалт, түрээсийн зуучлал, төслийн маркетинг, хөрөнгийн зөвлөгөө, үнэлгээ — Oigon Numrug Properties.",
+  alternates: { canonical: "/real-estate/services" },
+  openGraph: {
+    title: "Үйлчилгээ — Oigon Numrug Properties",
+    description: "4 үндсэн чиглэлээр Дархан хотын үл хөдлөх хөрөнгийн зөвлөх үйлчилгээ.",
+    url: "/real-estate/services",
+  },
 };
 
 export default function ServicesPage() {

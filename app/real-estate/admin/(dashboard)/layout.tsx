@@ -9,6 +9,7 @@ const navItems = [
   { href: "/real-estate/admin/services", label: "Үйлчилгээ" },
   { href: "/real-estate/admin/contact", label: "Холбоо барих" },
   { href: "/real-estate/admin/projects", label: "Төслүүд" },
+  { href: "/real-estate/admin/settings", label: "Тохиргоо" },
 ];
 
 export default async function RealEstateAdminDashboardLayout({

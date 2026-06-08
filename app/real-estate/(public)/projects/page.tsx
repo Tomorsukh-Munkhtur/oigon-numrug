@@ -6,7 +6,15 @@ import { listProjects } from "@/lib/real-estate/content";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Төслүүд — Oigon Numrug Properties",
+  title: "Төслүүд",
+  description:
+    "Skyline Residence, Civic Office Tower, Garden Village, Darkhan Plaza зэрэг Дархан хотын онцлох үл хөдлөх төслүүд — Oigon Numrug Properties.",
+  alternates: { canonical: "/real-estate/projects" },
+  openGraph: {
+    title: "Төслүүд — Oigon Numrug Properties",
+    description: "Дархан хотын үл хөдлөх хөрөнгийн онцлох төслүүд.",
+    url: "/real-estate/projects",
+  },
 };
 
 export default function ProjectsPage() {
