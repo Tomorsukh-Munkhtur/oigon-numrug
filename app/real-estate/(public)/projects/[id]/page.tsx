@@ -1,286 +1,270 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getProject, listProjects } from "@/lib/real-estate/content";
+import type { Metadata } from "next";
+import ProjectCard from "../../../_components/ProjectCard";
+import { ArrowRight, PhoneIcon, PinIcon } from "../../../_components/icons";
+import { getContactChannel, getProject, projects } from "@/lib/real-estate/content";
 
-export const dynamic = "force-dynamic";
+// Бүх төслийн хуудсыг build үед бэлдэнэ; бусад ID 404 өгнө.
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return projects.map((project) => ({ id: project.id }));
+}
 
 type Params = { id: string };
 
-export async function generateMetadata({ params }: { params: Promise<Params> }) {
+const pad = (value: number) => String(value).padStart(2, "0");
+
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { id } = await params;
   const project = getProject(id);
   if (!project) return { title: "Төсөл олдсонгүй" };
+
+  const description = project.summary ?? project.longDescription;
+  const url = `/real-estate/projects/${project.id}`;
   return {
-    title: `${project.title} — Oigon Numrug Properties`,
-    description: project.summary ?? project.longDescription,
+    title: project.title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title: `${project.title} — Oigon Numrug Properties`,
+      description,
+      url,
+      images: project.image ? [project.image] : undefined,
+    },
   };
 }
 
-export default async function ProjectDetailPage({
-  params,
-}: {
-  params: Promise<Params>;
-}) {
+export default async function ProjectDetailPage({ params }: { params: Promise<Params> }) {
   const { id } = await params;
   const project = getProject(id);
   if (!project) notFound();
 
-  const related = listProjects()
-    .filter((p) => p.id !== project.id)
-    .slice(0, 3);
+  const index = projects.findIndex((p) => p.id === project.id);
+  const related = projects.filter((p) => p.id !== project.id).slice(0, 3);
+  const phone = getContactChannel("phone");
+
+  const facts = [
+    { label: "Хөгжүүлэгч", value: project.developer },
+    { label: "Ашиглалт", value: project.completion },
+    { label: "Давхар", value: project.floors },
+    { label: "Талбай", value: project.size },
+    { label: "Нэгж", value: project.units },
+    { label: "Зогсоол", value: project.parking },
+  ].filter((fact): fact is { label: string; value: string } => Boolean(fact.value));
+
+  const highlights = project.highlights ?? [];
+  const amenities = project.amenities ?? [];
+  const floorPlans = (project.floorPlans ?? []).filter((plan) => plan.image);
+  const gallery = (project.gallery ?? []).filter(Boolean);
 
   return (
     <>
-      <section className="re-detail-hero">
-        <Image
-          src={project.image}
-          alt={project.title}
-          fill
-          priority
-          sizes="100vw"
-          className="re-detail-hero__image"
-        />
-        <div className="re-detail-hero__overlay" aria-hidden="true" />
-        <div className="re-container re-detail-hero__inner">
-          <nav className="re-detail-crumbs" aria-label="Сурвалж">
-            <Link href="/real-estate">Нүүр</Link>
-            <span aria-hidden="true">/</span>
-            <Link href="/real-estate/projects">Төслүүд</Link>
-            <span aria-hidden="true">/</span>
-            <span>{project.title}</span>
+      <section className="re-dhero">
+        <div className="re-wrap">
+          <nav className="re-crumbs re-rise" aria-label="Breadcrumb">
+            <span>
+              <Link href="/real-estate">Нүүр</Link>
+              <span aria-hidden="true"> /</span>
+            </span>
+            <span>
+              <Link href="/real-estate/projects">Төслүүд</Link>
+              <span aria-hidden="true"> /</span>
+            </span>
+            <span aria-current="page">{project.title}</span>
           </nav>
-          <span className="re-detail-hero__status">{project.status}</span>
-          <span className="re-detail-hero__type">{project.type}</span>
-          <h1>{project.title}</h1>
-          <p className="re-detail-hero__location">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-              <circle cx="12" cy="10" r="3" />
-            </svg>
-            {project.location}
-          </p>
-          <div className="re-detail-hero__price">
-            <span>Эхлэх үнэ</span>
-            <strong>{project.price}</strong>
+
+          <div className="re-dhero__head">
+            <div className="re-rise">
+              <div className="re-dhero__tags">
+                {project.status && <span className="re-pill re-pill--accent">{project.status}</span>}
+                {project.type && <span className="re-pill">{project.type}</span>}
+                <span className="re-pill">№ {pad(index + 1)}</span>
+              </div>
+              <h1 className="re-display re-dhero__title">{project.title}</h1>
+              <p className="re-dhero__loc">
+                <PinIcon size={17} />
+                {project.location}
+              </p>
+            </div>
+            {project.price && (
+              <div className="re-dhero__price re-rise">
+                <span>Эхлэх үнэ</span>
+                <strong>{project.price}</strong>
+              </div>
+            )}
           </div>
+
+          {project.image && (
+            <div className="re-dhero__media re-rise">
+              <Image src={project.image} alt={project.title} fill priority sizes="(min-width: 1280px) 1280px, 100vw" />
+            </div>
+          )}
         </div>
       </section>
 
+      {facts.length > 0 && (
+        <section className="re-facts" aria-label="Төслийн үзүүлэлт">
+          <div className="re-wrap">
+            <dl>
+              {facts.map((fact) => (
+                <div key={fact.label}>
+                  <dt>{fact.label}</dt>
+                  <dd>{fact.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </section>
+      )}
+
       <section className="re-section">
-        <div className="re-container re-detail-grid">
-          <div className="re-detail-main">
+        <div className="re-wrap re-detail">
+          <div>
             {project.longDescription && (
-              <article className="re-detail-block">
-                <span className="re-eyebrow re-eyebrow--dark">
-                  <span className="re-eyebrow-dot" aria-hidden="true" />
-                  Төслийн тухай
-                </span>
-                <h2>Төслийн дэлгэрэнгүй</h2>
-                <p>{project.longDescription}</p>
-              </article>
+              <div className="re-block re-reveal">
+                <p className="re-kicker">Төслийн тухай</p>
+                <h2 className="re-display re-block__title">Төслийн дэлгэрэнгүй</h2>
+                <p className="re-block__text">{project.longDescription}</p>
+              </div>
             )}
 
-            {project.highlights && project.highlights.length > 0 && (
-              <article className="re-detail-block">
-                <span className="re-eyebrow re-eyebrow--dark">
-                  <span className="re-eyebrow-dot" aria-hidden="true" />
-                  Онцлог
-                </span>
-                <h2>Яагаад энэ төсөл вэ</h2>
-                <ul className="re-detail-highlights">
-                  {project.highlights.map((h) => (
-                    <li key={h}>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
-                      <span>{h}</span>
+            {highlights.length > 0 && (
+              <div className="re-block re-reveal">
+                <p className="re-kicker">Онцлог</p>
+                <h2 className="re-display re-block__title">Яагаад энэ төсөл вэ</h2>
+                <ol className="re-highlights">
+                  {highlights.map((item, i) => (
+                    <li key={item}>
+                      <span>{pad(i + 1)}</span>
+                      {item}
                     </li>
                   ))}
-                </ul>
-              </article>
+                </ol>
+              </div>
             )}
 
-            {project.amenities && project.amenities.length > 0 && (
-              <article className="re-detail-block">
-                <span className="re-eyebrow re-eyebrow--dark">
-                  <span className="re-eyebrow-dot" aria-hidden="true" />
-                  Тоноглол
-                </span>
-                <h2>Тоноглол ба үйлчилгээ</h2>
-                <div className="re-detail-amenities">
-                  {project.amenities.map((a) => (
-                    <span key={a} className="re-detail-amenity">{a}</span>
+            {amenities.length > 0 && (
+              <div className="re-block re-reveal">
+                <p className="re-kicker">Тоноглол</p>
+                <h2 className="re-display re-block__title">Тоноглол ба үйлчилгээ</h2>
+                <ul className="re-amenities">
+                  {amenities.map((item) => (
+                    <li key={item}>{item}</li>
                   ))}
-                </div>
-              </article>
+                </ul>
+              </div>
             )}
 
-            {project.floorPlans && project.floorPlans.length > 0 && (
-              <article className="re-detail-block">
-                <span className="re-eyebrow re-eyebrow--dark">
-                  <span className="re-eyebrow-dot" aria-hidden="true" />
-                  Зохион байгуулалт
-                </span>
-                <h2>Өрөөний зохион байгуулалт</h2>
-                <p className="re-detail-block__lead">
-                  Сонирхсон айлын төлөвлөгөөг доорхоос үзнэ үү. Шууд утсаар
-                  холбогдох эсвэл уулзалт товлоход тус болно.
-                </p>
-                <div className="re-floorplan-grid">
-                  {project.floorPlans.map((plan) => (
-                    <figure key={plan.id} className="re-floorplan">
-                      <div className="re-floorplan__media">
+            {floorPlans.length > 0 && (
+              <div className="re-block re-reveal">
+                <p className="re-kicker">Зохион байгуулалт</p>
+                <h2 className="re-display re-block__title">Өрөөний зохион байгуулалт</h2>
+                <div className="re-plans">
+                  {floorPlans.map((plan) => (
+                    <figure key={plan.id} className="re-plan">
+                      <div className="re-plan__media">
                         <Image
                           src={plan.image}
                           alt={`${project.title} — ${plan.label}`}
                           fill
-                          sizes="(min-width: 1100px) 32vw, (min-width: 700px) 48vw, 100vw"
-                          className="re-floorplan__image"
+                          sizes="(min-width: 1000px) 260px, 50vw"
                         />
                       </div>
                       <figcaption>
-                        <strong>{plan.rooms}</strong>
+                        <strong>{plan.rooms || plan.label}</strong>
                         <span>{plan.area}</span>
                       </figcaption>
                     </figure>
                   ))}
                 </div>
-              </article>
+              </div>
             )}
 
-            {project.gallery && project.gallery.length > 0 && (
-              <article className="re-detail-block">
-                <span className="re-eyebrow re-eyebrow--dark">
-                  <span className="re-eyebrow-dot" aria-hidden="true" />
-                  Зургийн цомог
-                </span>
-                <h2>Дотоод ба гаднах үзэмж</h2>
-                <div className="re-detail-gallery">
-                  {project.gallery.map((src, i) => (
-                    <div
-                      key={`${src}-${i}`}
-                      className={`re-detail-gallery__item ${i === 0 ? "re-detail-gallery__item--lead" : ""}`}
-                    >
+            {gallery.length > 0 && (
+              <div className="re-block re-reveal">
+                <p className="re-kicker">Зургийн цомог</p>
+                <h2 className="re-display re-block__title">Дотоод ба гаднах үзэмж</h2>
+                <div className="re-gallery">
+                  {gallery.map((src, i) => (
+                    <div key={`${src}-${i}`} className="re-gallery__item">
                       <Image
                         src={src}
-                        alt={`${project.title} зураг ${i + 1}`}
+                        alt={`${project.title} — зураг ${i + 1}`}
                         fill
-                        sizes="(min-width: 1100px) 48vw, 100vw"
-                        className="re-detail-gallery__image"
+                        sizes={i === 0 ? "(min-width: 1000px) 850px, 100vw" : "(min-width: 1000px) 420px, 50vw"}
                       />
                     </div>
                   ))}
                 </div>
-              </article>
+              </div>
             )}
           </div>
 
-          <aside className="re-detail-aside">
-            <div className="re-detail-card">
-              <h3>Төслийн товч</h3>
-              <dl className="re-detail-facts">
-                <div>
-                  <dt>Хөгжүүлэгч</dt>
-                  <dd>{project.developer ?? "—"}</dd>
-                </div>
-                <div>
-                  <dt>Ашиглалт</dt>
-                  <dd>{project.completion ?? "—"}</dd>
-                </div>
-                <div>
-                  <dt>Давхар</dt>
-                  <dd>{project.floors ?? "—"}</dd>
-                </div>
-                <div>
-                  <dt>Талбай</dt>
-                  <dd>{project.size ?? "—"}</dd>
-                </div>
-                <div>
-                  <dt>Нэгж тоо</dt>
-                  <dd>{project.units ?? "—"}</dd>
-                </div>
-                <div>
-                  <dt>Зогсоол</dt>
-                  <dd>{project.parking ?? "—"}</dd>
-                </div>
-                <div>
-                  <dt>Үнэ</dt>
-                  <dd>{project.price}</dd>
-                </div>
-                <div>
-                  <dt>Байршил</dt>
-                  <dd>{project.location}</dd>
-                </div>
+          <aside className="re-aside">
+            <div className="re-aside__card">
+              <p className="re-kicker">Сонирхож байна уу?</p>
+              <h2 className="re-display re-aside__title">{project.title}</h2>
+              <dl className="re-aside__rows">
+                {project.price && (
+                  <div>
+                    <dt>Үнэ</dt>
+                    <dd>{project.price}</dd>
+                  </div>
+                )}
+                {project.size && (
+                  <div>
+                    <dt>Талбай</dt>
+                    <dd>{project.size}</dd>
+                  </div>
+                )}
+                {project.completion && (
+                  <div>
+                    <dt>Ашиглалт</dt>
+                    <dd>{project.completion}</dd>
+                  </div>
+                )}
               </dl>
-
-              <div className="re-detail-card__actions">
-                <Link href="/real-estate/contact" className="re-btn re-btn--primary">
-                  Дэлгэрэнгүй авах
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <path d="M5 12h14M13 5l7 7-7 7" />
-                  </svg>
-                </Link>
-                <a href="tel:+97600000000" className="re-btn re-btn--ghost">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.36 1.9.7 2.8a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.9.34 1.84.57 2.8.7A2 2 0 0122 16.92z" />
-                  </svg>
-                  Утсаар холбогдох
+              <Link href="/real-estate/contact" className="re-btn re-btn--accent re-btn--block">
+                Зөвлөгөө авах
+                <ArrowRight />
+              </Link>
+              {phone && (
+                <a href={phone.href} className="re-btn re-btn--line re-btn--block">
+                  <PhoneIcon size={16} />
+                  {phone.value}
                 </a>
-              </div>
+              )}
             </div>
           </aside>
         </div>
       </section>
 
       {related.length > 0 && (
-        <section className="re-section re-projects">
-          <div className="re-container">
-            <div className="re-section-head re-section-head--with-cta">
+        <section className="re-section re-section--sand">
+          <div className="re-wrap">
+            <div className="re-head">
               <div>
-                <span className="re-eyebrow re-eyebrow--dark">
-                  <span className="re-eyebrow-dot" aria-hidden="true" />
-                  Бусад төсөл
-                </span>
-                <h2>Үргэлжлүүлэн үзэх</h2>
+                <p className="re-kicker">Бусад төсөл</p>
+                <h2 className="re-display re-h2">Үргэлжлүүлэн үзэх</h2>
               </div>
-              <Link href="/real-estate/projects" className="re-section-head__cta">
-                Бүх төслийг үзэх
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M5 12h14M13 5l7 7-7 7" />
-                </svg>
-              </Link>
-            </div>
-
-            <div className="re-project-grid">
-              {related.map((p) => (
-                <Link
-                  key={p.id}
-                  href={`/real-estate/projects/${p.id}`}
-                  className="re-project"
-                  aria-label={`${p.title} төсөл`}
-                >
-                  <div className="re-project__media">
-                    <Image
-                      src={p.image}
-                      alt={p.title}
-                      fill
-                      sizes="(min-width: 1100px) 33vw, (min-width: 700px) 50vw, 100vw"
-                      className="re-project__photo"
-                    />
-                    <div className="re-project__media-overlay" aria-hidden="true" />
-                    <span className="re-project__status">{p.status}</span>
-                  </div>
-                  <div className="re-project__body">
-                    <span className="re-project__type">{p.type}</span>
-                    <h3>{p.title}</h3>
-                    <p className="re-project__meta">
-                      <span>{p.location}</span>
-                      <span aria-hidden="true">·</span>
-                      <span>{p.price}</span>
-                    </p>
-                  </div>
+              <div className="re-head__aside">
+                <Link href="/real-estate/projects" className="re-link">
+                  Бүх төсөл ({pad(projects.length)})
+                  <ArrowRight size={16} />
                 </Link>
+              </div>
+            </div>
+            <div className="re-related">
+              {related.map((p) => (
+                <ProjectCard
+                  key={p.id}
+                  project={p}
+                  index={projects.indexOf(p)}
+                  sizes="(min-width: 760px) 33vw, 100vw"
+                />
               ))}
             </div>
           </div>

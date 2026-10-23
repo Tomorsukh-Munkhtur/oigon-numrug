@@ -1,11 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getSafetyPage, listSafetyNews } from "@/lib/safety/content";
+import type { Metadata } from "next";
+import { listSafetyNews, safetyPages } from "@/lib/safety/content";
 
-export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "ХАБЭА мэдээ мэдээлэл",
+  description: "Хөдөлмөрийн аюулгүй байдал, эрүүл ахуйн зөвлөмж, сургалт, үйл явдлын мэдээ — Ойгон Нөмрөг ХАБЭА.",
+  alternates: { canonical: "/safety/news" },
+  openGraph: {
+    title: "ХАБЭА мэдээ мэдээлэл — Oigon Numrug ХАБЭА",
+    description: "Хөдөлмөрийн аюулгүй байдал, эрүүл ахуйн зөвлөмж, сургалт, үйл явдлын мэдээ — Ойгон Нөмрөг ХАБЭА.",
+    url: "/safety/news",
+  },
+};
 
 export default function SafetyNewsPage() {
-  const page = getSafetyPage("news");
+  const page = safetyPages.news;
   const allNews = listSafetyNews();
   const featuredNews = allNews[0];
   const filteredNews = allNews.slice(1);

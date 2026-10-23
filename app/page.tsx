@@ -1,93 +1,109 @@
+import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 
-type Organization =
-  | {
-      id: string;
-      logo: string;
-      logoAlt: string;
-      background: string;
-      description: string;
-      href: string;
-      action: string;
-      side: "realEstate";
-    }
-  | {
-      id: string;
-      logo: string;
-      logoAlt: string;
-      background: string;
-      description: string;
-      href: string;
-      action: string;
-      side: "safety";
-    };
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
-const organizations: Organization[] = [
+type Gateway = {
+  id: "re" | "safety";
+  index: string;
+  eyebrow: string;
+  logo: { src: string; alt: string; width: number; height: number };
+  background: string;
+  description: string;
+  tags: string[];
+  href: string;
+  action: string;
+};
+
+const gateways: Gateway[] = [
   {
-    id: "real-estate",
-    logo: "/Logo_White color - 2.png",
-    logoAlt: "Oigon Numrug Properties",
+    id: "re",
+    index: "01",
+    eyebrow: "Үл хөдлөх хөрөнгө",
+    logo: { src: "/Logo_White color - 2.png", alt: "Oigon Numrug Properties", width: 5884, height: 1493 },
     background: "/real-estate-bg.jpg",
     description:
       "Орон сууц, газар, арилжааны талбайн зөвлөгөө, борлуулалт, түрээсийн найдвартай шийдэл.",
+    tags: ["Борлуулалт, түрээс", "Төслийн маркетинг", "Хөрөнгийн зөвлөгөө", "Үнэлгээ"],
     href: "/real-estate",
     action: "Дэлгэрэнгүй",
-    side: "realEstate",
   },
   {
     id: "safety",
-    logo: "/oigon numrug-06.png",
-    logoAlt: "Oigon Numrug HABEA",
+    index: "02",
+    eyebrow: "ХАБЭА · Аюулгүй ажиллагаа",
+    logo: { src: "/oigon numrug-06.png", alt: "Oigon Numrug ХАБЭА", width: 2771, height: 1300 },
     background: "/safety-bg.jpg",
     description:
       "Ажлын байрны эрсдэлийн үнэлгээ, сургалт, хяналт, хамгаалалтын соёлыг төлөвшүүлэх үйлчилгээ.",
+    tags: ["Эрсдэлийн үнэлгээ", "Сургалт, сертификат", "Аудит, хяналт"],
     href: "/safety",
     action: "Танилцах",
-    side: "safety",
   },
 ];
 
 export default function Home() {
   return (
-    <main className="home-page">
-      <section className="org-grid">
-        {organizations.map((organization) => (
-          <a
-            key={organization.id}
-            href={organization.href}
-            className={`org-panel org-panel-${organization.side}`}
-          >
-            <Image
-              src={organization.background}
-              alt=""
-              fill
-              priority={organization.side === "realEstate"}
-              sizes="(min-width: 768px) 50vw, 100vw"
-              className="org-bg-image"
-            />
-            <div className="org-overlay" aria-hidden="true" />
-            <div className="org-panel-pattern" aria-hidden="true" />
+    <main className="gate">
+      <header className="gate-top">
+        <h1 className="gate-brand">Ойгон Нөмрөг</h1>
+        <p className="gate-hint">Чиглэлээ сонгоно уу</p>
+      </header>
 
-            <div className="org-content">
-              <div className="org-logo-card">
-                <Image
-                  src={organization.logo}
-                  alt={organization.logoAlt}
-                  width={820}
-                  height={360}
-                  priority
-                  className="org-logo"
-                />
+      <div className="gate-grid">
+        {gateways.map((gateway) => (
+          <Link key={gateway.id} href={gateway.href} className={`gate-panel gate-panel--${gateway.id}`}>
+            <div className="gate-media" aria-hidden="true">
+              <Image
+                src={gateway.background}
+                alt=""
+                fill
+                priority
+                sizes="(min-width: 768px) 60vw, 100vw"
+                className="gate-bg"
+              />
+            </div>
+            <div className="gate-shade" aria-hidden="true" />
+            <div className="gate-lines" aria-hidden="true" />
+
+            <div className="gate-inner">
+              <div className="gate-meta">
+                <span className="gate-index">{gateway.index}</span>
+                <span className="gate-meta-line" aria-hidden="true" />
+                <span>{gateway.eyebrow}</span>
               </div>
 
-              <div className="org-copy">
-                <p className="org-description">{organization.description}</p>
-                <span className="org-action">{organization.action}</span>
+              <div className="gate-body">
+                <Image
+                  src={gateway.logo.src}
+                  alt={gateway.logo.alt}
+                  width={gateway.logo.width}
+                  height={gateway.logo.height}
+                  priority
+                  className="gate-logo"
+                />
+                <p className="gate-desc">{gateway.description}</p>
+                <ul className="gate-tags">
+                  {gateway.tags.map((tag) => (
+                    <li key={tag}>{tag}</li>
+                  ))}
+                </ul>
+                <span className="gate-cta">
+                  {gateway.action}
+                  <span className="gate-cta-icon" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14M13 5l7 7-7 7" />
+                    </svg>
+                  </span>
+                </span>
               </div>
             </div>
-          </a>
+          </Link>
         ))}
-      </section>
+      </div>
     </main>
   );
 }

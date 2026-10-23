@@ -1,12 +1,22 @@
 import Image from "next/image";
 import type { CSSProperties } from "react";
-import { getSafetyPage, getSafetySettings } from "@/lib/safety/content";
+import type { Metadata } from "next";
+import { safetyPages, safetySettings } from "@/lib/safety/content";
 
-export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "ХАБЭА — Холбоо барих",
+  description: "Аюулгүй ажиллагааны зөвлөгөө авах, хамтран ажиллах хүсэлтээ Ойгон Нөмрөг ХАБЭА-д илгээнэ үү.",
+  alternates: { canonical: "/safety/contact" },
+  openGraph: {
+    title: "ХАБЭА — Холбоо барих — Oigon Numrug ХАБЭА",
+    description: "Аюулгүй ажиллагааны зөвлөгөө авах, хамтран ажиллах хүсэлтээ Ойгон Нөмрөг ХАБЭА-д илгээнэ үү.",
+    url: "/safety/contact",
+  },
+};
 
 export default function SafetyContactPage() {
-  const page = getSafetyPage("contact");
-  const settings = getSafetySettings();
+  const page = safetyPages.contact;
+  const settings = safetySettings;
 
   return (
     <>

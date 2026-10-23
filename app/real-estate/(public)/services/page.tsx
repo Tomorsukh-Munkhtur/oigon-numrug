@@ -1,8 +1,6 @@
-import Link from "next/link";
+import CtaBand from "../../_components/CtaBand";
 import PageHero from "../../_components/PageHero";
-import { getServicesSettings } from "@/lib/real-estate/content";
-
-export const dynamic = "force-dynamic";
+import { servicesContent } from "@/lib/real-estate/content";
 
 export const metadata = {
   title: "Үйлчилгээ",
@@ -17,7 +15,7 @@ export const metadata = {
 };
 
 export default function ServicesPage() {
-  const s = getServicesSettings();
+  const s = servicesContent;
 
   return (
     <>
@@ -37,6 +35,7 @@ export default function ServicesPage() {
           </>
         }
         description={s.heroDescription}
+        meta={[`${String(s.items.length).padStart(2, "0")} чиглэл`, `${String(s.processSteps.length).padStart(2, "0")} алхамт явц`]}
         crumbs={[
           { href: "/real-estate", label: "Нүүр" },
           { href: "/real-estate/services", label: "Үйлчилгээ" },
@@ -45,54 +44,22 @@ export default function ServicesPage() {
 
       {s.items.length > 0 && (
         <section className="re-section">
-          <div className="re-container">
-            <div className="re-service-grid">
-              {s.items.map((service, idx) => (
-                <article key={`${service.title}-${idx}`} className="re-service">
-                  <span className="re-service__number">
-                    {String(idx + 1).padStart(2, "0")}
-                  </span>
-                  <h3>{service.title}</h3>
-                  <p>{service.description}</p>
+          <div className="re-wrap">
+            <ol className="re-services">
+              {s.items.map((service, index) => (
+                <li key={service.title} id={`service-${index + 1}`} className="re-service re-reveal">
+                  <span className="re-service__num">{String(index + 1).padStart(2, "0")}</span>
+                  <div className="re-service__main">
+                    <h2>{service.title}</h2>
+                    <p>{service.description}</p>
+                  </div>
                   {service.points.length > 0 && (
-                    <ul>
-                      {service.points.map((point, pIdx) => (
-                        <li key={`${point}-${pIdx}`}>
-                          <span aria-hidden="true">—</span>
-                          {point}
-                        </li>
+                    <ul className="re-service__points">
+                      {service.points.map((point) => (
+                        <li key={point}>{point}</li>
                       ))}
                     </ul>
                   )}
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {s.processSteps.length > 0 && (
-        <section className="re-section re-about">
-          <div className="re-container">
-            <div className="re-section-head">
-              <div>
-                <span className="re-eyebrow re-eyebrow--dark">
-                  <span className="re-eyebrow-dot" aria-hidden="true" />
-                  {s.processEyebrow}
-                </span>
-                <h2>{s.processTitle}</h2>
-              </div>
-              <p>{s.processParagraph}</p>
-            </div>
-
-            <ol className="re-process">
-              {s.processSteps.map((p, idx) => (
-                <li key={`${p.step}-${idx}`}>
-                  <span className="re-process__step">{p.step}</span>
-                  <div>
-                    <h3>{p.title}</h3>
-                    <p>{p.body}</p>
-                  </div>
                 </li>
               ))}
             </ol>
@@ -100,36 +67,38 @@ export default function ServicesPage() {
         </section>
       )}
 
-      <section className="re-cta">
-        <div className="re-container re-cta-inner">
-          <div className="re-cta-copy">
-            <span className="re-eyebrow re-eyebrow--light">
-              <span className="re-eyebrow-dot" aria-hidden="true" />
-              {s.ctaEyebrow}
-            </span>
-            <h2>{s.ctaTitle}</h2>
-            <p>{s.ctaParagraph}</p>
-            <div className="re-cta-actions">
-              {s.ctaPrimaryLabel && (
-                <Link
-                  href={s.ctaPrimaryHref}
-                  className="re-btn re-btn--primary"
-                >
-                  {s.ctaPrimaryLabel}
-                </Link>
-              )}
-              {s.ctaSecondaryLabel && (
-                <Link
-                  href={s.ctaSecondaryHref}
-                  className="re-btn re-btn--ghost"
-                >
-                  {s.ctaSecondaryLabel}
-                </Link>
-              )}
+      {s.processSteps.length > 0 && (
+        <section className="re-section re-section--sand">
+          <div className="re-wrap">
+            <div className="re-head">
+              <div>
+                <p className="re-kicker">{s.processEyebrow}</p>
+                <h2 className="re-display re-h2">{s.processTitle}</h2>
+              </div>
+              <div className="re-head__aside">
+                <p>{s.processParagraph}</p>
+              </div>
             </div>
+            <ol className="re-process">
+              {s.processSteps.map((step) => (
+                <li key={step.step} className="re-reveal">
+                  <span className="re-process__step">{step.step}</span>
+                  <h3>{step.title}</h3>
+                  <p>{step.body}</p>
+                </li>
+              ))}
+            </ol>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
+
+      <CtaBand
+        kicker={s.ctaEyebrow}
+        title={s.ctaTitle}
+        description={s.ctaParagraph}
+        primary={{ label: s.ctaPrimaryLabel, href: s.ctaPrimaryHref }}
+        secondary={{ label: s.ctaSecondaryLabel, href: s.ctaSecondaryHref }}
+      />
     </>
   );
 }

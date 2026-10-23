@@ -4,7 +4,7 @@ import "./globals.css";
 
 const roboto = Roboto({
   variable: "--font-roboto",
-  subsets: ["latin", "cyrillic"],
+  subsets: ["latin", "cyrillic", "cyrillic-ext"],
   weight: ["400", "500", "700"],
 });
 
@@ -36,9 +36,6 @@ export const metadata: Metadata = {
     email: false,
     address: false,
     telephone: false,
-  },
-  alternates: {
-    canonical: "/",
   },
   openGraph: {
     type: "website",

@@ -1,9 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getSafetyNews, listSafetyNews } from "@/lib/safety/content";
+import type { Metadata } from "next";
+import { getSafetyNews, listSafetyNews, safetyNews } from "@/lib/safety/content";
 
-export const dynamic = "force-dynamic";
+// Бүх мэдээний хуудсыг build үед бэлдэнэ; бусад ID 404 өгнө.
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return safetyNews.map((news) => ({ id: String(news.id) }));
+}
 
 function paragraphs(body: string | null | undefined) {
   if (!body) return [];
@@ -28,6 +34,25 @@ function readingMinutes(text: string) {
   return Math.max(1, Math.ceil(words / 180));
 }
 
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const item = getSafetyNews(Number(id));
+  if (!item) return { title: "Мэдээ олдсонгүй" };
+  const url = `/safety/news/${item.id}`;
+  return {
+    title: item.title,
+    description: item.description,
+    alternates: { canonical: url },
+    openGraph: {
+      type: "article",
+      title: item.title,
+      description: item.description,
+      url,
+      images: item.image ? [item.image] : undefined,
+    },
+  };
+}
+
 export default async function SafetyNewsDetailPage({
   params,
 }: {
@@ -38,10 +63,10 @@ export default async function SafetyNewsDetailPage({
   if (!Number.isFinite(numericId)) notFound();
 
   const item = getSafetyNews(numericId);
-  if (!item || !item.published) notFound();
+  if (!item) notFound();
 
   const blocks = paragraphs(item.body);
-  const related = listSafetyNews({ limit: 4 })
+  const related = listSafetyNews(4)
     .filter((news) => news.id !== item.id)
     .slice(0, 3);
 

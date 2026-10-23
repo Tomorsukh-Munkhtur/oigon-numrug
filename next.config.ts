@@ -1,20 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    serverActions: {
-      bodySizeLimit: "10mb",
-    },
-  },
+  // Бүрэн статик сайт: `next build` нь out/ хавтсанд HTML үүсгэж, Cloudflare Pages түүнийг шууд үйлчилнэ.
+  output: "export",
   images: {
-    // Self-hosted on EC2 — keep optimizer disabled so newly uploaded files
-    // are served directly from /public/uploads/* without the /_next/image
-    // pipeline (which can fail when Sharp is missing on the host).
+    // Static export has no image optimizer — images in /public are served as-is.
     unoptimized: true,
-    remotePatterns: [
-      { protocol: "https", hostname: "**" },
-      { protocol: "http", hostname: "localhost" },
-    ],
   },
   poweredByHeader: false,
   compress: true,

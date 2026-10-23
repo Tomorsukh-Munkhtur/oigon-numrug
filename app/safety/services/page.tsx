@@ -1,12 +1,21 @@
 import Image from "next/image";
 import type { CSSProperties } from "react";
-import { getSafetyPage, listSafetyServices } from "@/lib/safety/content";
+import type { Metadata } from "next";
+import { safetyPages, safetyServices } from "@/lib/safety/content";
 
-export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "ХАБЭА үйлчилгээ",
+  description: "Ажлын байрны эрсдэлийн үнэлгээ, аюулгүй байдлын сургалт ба сертификат, аудит, эрүүл мэндийн хамтын ажиллагаа — Ойгон Нөмрөг ХАБЭА.",
+  alternates: { canonical: "/safety/services" },
+  openGraph: {
+    title: "ХАБЭА үйлчилгээ — Oigon Numrug ХАБЭА",
+    description: "Ажлын байрны эрсдэлийн үнэлгээ, аюулгүй байдлын сургалт ба сертификат, аудит, эрүүл мэндийн хамтын ажиллагаа — Ойгон Нөмрөг ХАБЭА.",
+    url: "/safety/services",
+  },
+};
 
 export default function SafetyServicesPage() {
-  const page = getSafetyPage("services");
-  const safetyServices = listSafetyServices();
+  const page = safetyPages.services;
 
   return (
     <>

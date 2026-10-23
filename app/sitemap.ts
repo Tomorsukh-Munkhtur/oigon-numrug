@@ -1,67 +1,53 @@
 import type { MetadataRoute } from "next";
-import { listProjects } from "@/lib/real-estate/content";
+import { projects } from "@/lib/real-estate/content";
+import { safetyNews } from "@/lib/safety/content";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://oigonnumrug.mn";
+
+// Static export (Cloudflare Pages): build үед нэг удаа үүсгэнэ.
+export const dynamic = "force-static";
+
+type Route = {
+  path: string;
+  changeFrequency: NonNullable<MetadataRoute.Sitemap[number]["changeFrequency"]>;
+  priority: number;
+};
+
+const staticRoutes: Route[] = [
+  { path: "/", changeFrequency: "weekly", priority: 1.0 },
+  { path: "/real-estate", changeFrequency: "weekly", priority: 0.95 },
+  { path: "/real-estate/projects", changeFrequency: "weekly", priority: 0.9 },
+  { path: "/real-estate/about", changeFrequency: "monthly", priority: 0.7 },
+  { path: "/real-estate/services", changeFrequency: "monthly", priority: 0.7 },
+  { path: "/real-estate/contact", changeFrequency: "monthly", priority: 0.6 },
+  { path: "/safety", changeFrequency: "weekly", priority: 0.9 },
+  { path: "/safety/news", changeFrequency: "weekly", priority: 0.8 },
+  { path: "/safety/about", changeFrequency: "monthly", priority: 0.7 },
+  { path: "/safety/services", changeFrequency: "monthly", priority: 0.7 },
+  { path: "/safety/contact", changeFrequency: "monthly", priority: 0.6 },
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
-  const staticRoutes: MetadataRoute.Sitemap = [
-    {
-      url: `${SITE_URL}/`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 1.0,
-    },
-    {
-      url: `${SITE_URL}/real-estate`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.95,
-    },
-    {
-      url: `${SITE_URL}/real-estate/projects`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: `${SITE_URL}/real-estate/about`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${SITE_URL}/real-estate/services`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${SITE_URL}/real-estate/contact`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
-      url: `${SITE_URL}/safety`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-  ];
-
-  let projectRoutes: MetadataRoute.Sitemap = [];
-  try {
-    projectRoutes = listProjects().map((project) => ({
-      url: `${SITE_URL}/real-estate/projects/${project.id}`,
-      lastModified: now,
+  const routes: Route[] = [
+    ...staticRoutes,
+    ...projects.map((project) => ({
+      path: `/real-estate/projects/${project.id}`,
       changeFrequency: "monthly" as const,
       priority: 0.8,
-    }));
-  } catch {
-    projectRoutes = [];
-  }
+    })),
+    ...safetyNews.map((news) => ({
+      path: `/safety/news/${news.id}`,
+      changeFrequency: "yearly" as const,
+      priority: 0.6,
+    })),
+  ];
 
-  return [...staticRoutes, ...projectRoutes];
+  return routes.map((route) => ({
+    url: `${SITE_URL}${route.path}`,
+    lastModified: now,
+    changeFrequency: route.changeFrequency,
+    priority: route.priority,
+  }));
 }

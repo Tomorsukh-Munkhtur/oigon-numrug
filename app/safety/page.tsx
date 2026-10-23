@@ -1,16 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getSafetyPage, listSafetyNews, parseExtra } from "@/lib/safety/content";
+import type { Metadata } from "next";
+import { listSafetyNews, safetyHomeWeather, safetyPages } from "@/lib/safety/content";
 
-export const dynamic = "force-dynamic";
-
-type HomeExtra = {
-  weatherIcon: string;
-  weatherCity: string;
-  weatherTemp: string;
-  weatherCondition: string;
-  weatherWind: string;
-  weatherHumidity: string;
+export const metadata: Metadata = {
+  title: "ХАБЭА зөвлөх үйлчилгээ",
+  description: "Ойгон Нөмрөг ХАБЭА — ажлын байрны эрсдэлийн үнэлгээ, аюулгүй ажиллагааны сургалт, аудит, хөдөлмөрийн аюулгүй байдлын зөвлөх үйлчилгээ.",
+  alternates: { canonical: "/safety" },
+  openGraph: {
+    title: "ХАБЭА зөвлөх үйлчилгээ — Oigon Numrug ХАБЭА",
+    description: "Ойгон Нөмрөг ХАБЭА — ажлын байрны эрсдэлийн үнэлгээ, аюулгүй ажиллагааны сургалт, аудит, хөдөлмөрийн аюулгүй байдлын зөвлөх үйлчилгээ.",
+    url: "/safety",
+  },
 };
 
 function metricValue(raw: string) {
@@ -19,16 +20,9 @@ function metricValue(raw: string) {
 }
 
 export default function SafetyPage() {
-  const page = getSafetyPage("home");
-  const latestNews = listSafetyNews({ limit: 5 });
-  const weather = parseExtra<HomeExtra>(page, {
-    weatherIcon: "🌤️",
-    weatherCity: "Дархан хот",
-    weatherTemp: "+18°C",
-    weatherCondition: "Цэлмэг, бага зэргийн үүлтэй",
-    weatherWind: "Салхи: 4 м/с",
-    weatherHumidity: "Чийгшил: 45%",
-  });
+  const page = safetyPages.home;
+  const latestNews = listSafetyNews(5);
+  const weather = safetyHomeWeather;
 
   return (
     <>

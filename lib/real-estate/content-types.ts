@@ -31,8 +31,6 @@ export type RealEstateProject = {
   amenities?: string[];
   gallery?: string[];
   floorPlans?: RealEstateFloorPlan[];
-  published?: boolean;
-  sortOrder?: number;
 };
 
 export type RealEstateService = {

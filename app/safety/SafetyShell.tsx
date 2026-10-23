@@ -2,22 +2,18 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
+import type { SafetySettings } from "@/lib/safety/content";
 
 type SafetyShellProps = {
   children: React.ReactNode;
-  settings: Record<string, string>;
+  settings: SafetySettings;
 };
 
 export default function SafetyShell({ children, settings }: SafetyShellProps) {
-  const pathname = usePathname();
   const obs = useRef<IntersectionObserver | null>(null);
-  const isAdmin = pathname.startsWith("/safety/admin");
 
   useEffect(() => {
-    if (isAdmin) return;
-
     obs.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -41,11 +37,7 @@ export default function SafetyShell({ children, settings }: SafetyShellProps) {
       observer.disconnect();
       mo.disconnect();
     };
-  }, [isAdmin]);
-
-  if (isAdmin) {
-    return <>{children}</>;
-  }
+  }, []);
 
   const navLogo = settings.nav_logo || "/safety-logo-hab.png";
   const footerLogo = settings.footer_logo || "/safety-logo-hab.png";

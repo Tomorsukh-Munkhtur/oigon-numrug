@@ -1,17 +1,22 @@
 import Image from "next/image";
-import { getSafetyPage, parseExtra } from "@/lib/safety/content";
+import type { Metadata } from "next";
+import { safetyAboutFeatures, safetyPages } from "@/lib/safety/content";
 
-export const dynamic = "force-dynamic";
-
-type AboutExtra = {
-  features: string[];
+export const metadata: Metadata = {
+  title: "ХАБЭА — Бидний тухай",
+  description: "Ойгон Нөмрөг ХАБЭА нь байгууллагын аюулгүй ажиллагааны тогтолцоог сайжруулах, эрсдэлийг урьдчилан таамаглах, хянах чиглэлээр мэргэшсэн баг.",
+  alternates: { canonical: "/safety/about" },
+  openGraph: {
+    title: "ХАБЭА — Бидний тухай — Oigon Numrug ХАБЭА",
+    description: "Ойгон Нөмрөг ХАБЭА нь байгууллагын аюулгүй ажиллагааны тогтолцоог сайжруулах, эрсдэлийг урьдчилан таамаглах, хянах чиглэлээр мэргэшсэн баг.",
+    url: "/safety/about",
+  },
 };
 
 const featureIcons = ["🛡️", "🛠️", "📈"];
 
 export default function SafetyAboutPage() {
-  const page = getSafetyPage("about");
-  const extra = parseExtra<AboutExtra>(page, { features: [] });
+  const page = safetyPages.about;
 
   return (
     <>
@@ -47,7 +52,7 @@ export default function SafetyAboutPage() {
               <div className="sf-about-body">
                 {page.body && <p>{page.body}</p>}
                 <div className="sf-feature-list">
-                  {extra.features.map((feature, index) => (
+                  {safetyAboutFeatures.map((feature, index) => (
                     <div className="sf-feature-item" key={feature}>
                       <span>{featureIcons[index] || "•"}</span> {feature}
                     </div>

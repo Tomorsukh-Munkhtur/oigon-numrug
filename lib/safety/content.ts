@@ -1,11 +1,10 @@
-import { getDb } from "./db";
+// Oigon Numrug ХАБЭА — танилцуулгын сайтын бүх контент.
+// Текст, мэдээ, үйлчилгээ өөрчлөх бол энэ файлыг засаад push хийнэ (DB, admin байхгүй).
+// Зургууд public/ хавтсанд байна (жишээ нь "/safety-bg.jpg").
 
-export type SafetyPageSlug = "home" | "news" | "about" | "services" | "training" | "contact";
+export type SafetyPageSlug = "home" | "news" | "about" | "services" | "contact";
 
-export type SafetyPageContent = {
-  id: number;
-  slug: SafetyPageSlug;
-  name: string;
+export type SafetyPage = {
   hero_tag: string;
   hero_title: string;
   hero_highlight: string;
@@ -16,25 +15,30 @@ export type SafetyPageContent = {
   section_highlight: string;
   section_description: string;
   body: string;
-  secondary_body: string;
   visual_image: string;
   primary_button_text: string;
   primary_button_href: string;
-  secondary_button_text: string;
-  secondary_button_href: string;
-  extra_json: string;
+};
+
+export type SafetyWeather = {
+  weatherIcon: string;
+  weatherCity: string;
+  weatherTemp: string;
+  weatherCondition: string;
+  weatherWind: string;
+  weatherHumidity: string;
 };
 
 export type SafetyNews = {
   id: number;
+  /** YYYY-MM-DD */
   date: string;
   category: string;
   title: string;
   description: string;
+  /** Дэлгэрэнгүй текст; догол мөрүүдийг хоосон мөрөөр (\n\n) тусгаарлана. */
   body: string;
   image: string;
-  published: number;
-  sort_order: number;
 };
 
 export type SafetyService = {
@@ -43,99 +47,219 @@ export type SafetyService = {
   description: string;
   icon: string;
   color: string;
-  active: number;
-  sort_order: number;
 };
 
-export type SafetyTraining = {
-  id: number;
-  title: string;
-  description: string;
-  duration: string;
-  level: string;
-  icon: string;
-  color: string;
-  bg_color: string;
-  active: number;
-  sort_order: number;
+export type SafetySettings = {
+  nav_logo: string;
+  footer_logo: string;
+  footer_text: string;
+  contact_phone: string;
+  contact_phone_note: string;
+  contact_email: string;
+  contact_email_note: string;
+  contact_address: string;
+  contact_address_note: string;
 };
 
-export function listSafetyPages() {
-  return getDb()
-    .prepare("SELECT * FROM safety_pages ORDER BY id ASC")
-    .all() as SafetyPageContent[];
-}
-
-export function getSafetyPage(slug: SafetyPageSlug) {
-  const page = getDb().prepare("SELECT * FROM safety_pages WHERE slug = ?").get(slug) as
-    | SafetyPageContent
-    | undefined;
-
-  if (!page) {
-    throw new Error(`Safety page content not found: ${slug}`);
-  }
-
-  return page;
-}
-
-export function listSafetyNews(options: { limit?: number; includeUnpublished?: boolean } = {}) {
-  const where = options.includeUnpublished ? "" : "WHERE published = 1";
-  const limit = options.limit ? "LIMIT ?" : "";
-  const params = options.limit ? [options.limit] : [];
-
-  return getDb()
-    .prepare(
-      `SELECT * FROM safety_news ${where} ORDER BY sort_order ASC, date DESC, id DESC ${limit}`
-    )
-    .all(...params) as SafetyNews[];
+/** Мэдээг шинэ нь эхэндээ байхаар эрэмбэлнэ. */
+export function listSafetyNews(limit?: number) {
+  const sorted = [...safetyNews].sort((a, b) => b.date.localeCompare(a.date) || b.id - a.id);
+  return limit ? sorted.slice(0, limit) : sorted;
 }
 
 export function getSafetyNews(id: number) {
-  return getDb().prepare("SELECT * FROM safety_news WHERE id = ?").get(id) as SafetyNews | undefined;
+  return safetyNews.find((news) => news.id === id);
 }
 
-export function listSafetyServices(includeInactive = false) {
-  const where = includeInactive ? "" : "WHERE active = 1";
-  return getDb()
-    .prepare(`SELECT * FROM safety_services ${where} ORDER BY sort_order ASC, id ASC`)
-    .all() as SafetyService[];
-}
+export const safetySettings: SafetySettings = {
+  nav_logo: "/safety-logo-hab.png",
+  footer_logo: "/safety-logo-hab.png",
+  footer_text: "© 2025 Oigon Numrug HABEA. Safety First - Integrity Always.",
+  contact_phone: "+976 8800 0000",
+  contact_phone_note: "Ажлын цагаар холбогдоно уу.",
+  contact_email: "safety@oigonnumrug.mn",
+  contact_email_note: "Бид 24 цагийн дотор хариулах болно.",
+  contact_address: "Улаанбаатар хот, Сүхбаатар дүүрэг",
+  contact_address_note: "Ойгон Нөмрөг Төв байр",
+};
 
-export function getSafetyService(id: number) {
-  return getDb()
-    .prepare("SELECT * FROM safety_services WHERE id = ?")
-    .get(id) as SafetyService | undefined;
-}
+export const safetyPages: Record<SafetyPageSlug, SafetyPage> = {
+  home: {
+    hero_tag: "",
+    hero_title: "Аюулгүй байдлын",
+    hero_highlight: "стандарт тогтооно",
+    hero_description: "Бид олон улсын стандартын дагуу ажлын байрны эрсдэлийг бууруулж, хамгаалалтын дэвшилтэт соёлыг таны байгууллагад нутагшуулна.",
+    hero_image: "/safety-bg.jpg",
+    section_tag: "Мэдээ мэдээлэл",
+    section_title: "Сүүлийн үеийн",
+    section_highlight: "онцлох",
+    section_description: "",
+    body: "",
+    visual_image: "",
+    primary_button_text: "Бүх үйлчилгээ",
+    primary_button_href: "/safety/services",
+  },
+  news: {
+    hero_tag: "Мэдээ мэдээлэл",
+    hero_title: "Сүүлийн үеийн",
+    hero_highlight: "мэдээлэл",
+    hero_description: "",
+    hero_image: "/safety-bg.jpg",
+    section_tag: "",
+    section_title: "",
+    section_highlight: "",
+    section_description: "",
+    body: "",
+    visual_image: "",
+    primary_button_text: "",
+    primary_button_href: "",
+  },
+  about: {
+    hero_tag: "Бидний тухай",
+    hero_title: "Мэргэжлийн",
+    hero_highlight: "хандлага",
+    hero_description: "",
+    hero_image: "/project-office.jpg",
+    section_tag: "Бидний түүх",
+    section_title: "Таны аюулгүй байдал",
+    section_highlight: "Бидний хариуцлага",
+    section_description: "",
+    body: "Ойгон Нөмрөг ХАБЭА нь байгууллагын аюулгүй ажиллагааны тогтолцоог сайжруулах, эрсдэлийг урьдчилан таамаглах, хянах чиглэлээр мэргэшсэн баг хамт олон юм.",
+    visual_image: "/project-office.jpg",
+    primary_button_text: "",
+    primary_button_href: "",
+  },
+  services: {
+    hero_tag: "Манай үйлчилгээ",
+    hero_title: "Аюулгүй байдлын",
+    hero_highlight: "цогц шийдэл",
+    hero_description: "",
+    hero_image: "/project-garden.jpg",
+    section_tag: "Үйлчилгээнүүд",
+    section_title: "Бид юу",
+    section_highlight: "хийж чадах вэ?",
+    section_description: "",
+    body: "",
+    visual_image: "",
+    primary_button_text: "",
+    primary_button_href: "",
+  },
+  contact: {
+    hero_tag: "Холбоо барих",
+    hero_title: "Бидэнтэй",
+    hero_highlight: "холбогдоно уу",
+    hero_description: "",
+    hero_image: "/real-estate-bg.jpg",
+    section_tag: "Мэдээлэл",
+    section_title: "Шуурхай",
+    section_highlight: "холбоо барих",
+    section_description: "Та аюулгүй ажиллагааны зөвлөгөө авах эсвэл хамтран ажиллах хүсэлтээ илгээнэ үү.",
+    body: "",
+    visual_image: "",
+    primary_button_text: "",
+    primary_button_href: "",
+  },
+};
 
-export function listSafetyTraining(includeInactive = false) {
-  const where = includeInactive ? "" : "WHERE active = 1";
-  return getDb()
-    .prepare(`SELECT * FROM safety_training ${where} ORDER BY sort_order ASC, id ASC`)
-    .all() as SafetyTraining[];
-}
+export const safetyHomeWeather: SafetyWeather = {
+  weatherIcon: "🌤️",
+  weatherCity: "Дархан хот",
+  weatherTemp: "+18°C",
+  weatherCondition: "Цэлмэг, бага зэргийн үүлтэй",
+  weatherWind: "Салхи: 4 м/с",
+  weatherHumidity: "Чийгшил: 45%",
+};
 
-export function getSafetyTraining(id: number) {
-  return getDb()
-    .prepare("SELECT * FROM safety_training WHERE id = ?")
-    .get(id) as SafetyTraining | undefined;
-}
+export const safetyAboutFeatures: string[] = [
+  "Олон улсын стандарт (ISO 45001)",
+  "Мэргэжлийн багаж, тоног төхөөрөмж",
+  "Эрсдэлийн бодит үнэлгээ, шинжилгээ",
+];
 
-export function getSafetySettings() {
-  const rows = getDb()
-    .prepare("SELECT key, value FROM safety_settings ORDER BY key ASC")
-    .all() as { key: string; value: string }[];
+export const safetyNews: SafetyNews[] = [
+  {
+    id: 1,
+    date: "2026-05-15",
+    category: "Зөвлөмж",
+    title: "ХАБЭА-н шинэ стандарт хэрэгжиж эхэллээ",
+    description: "Олон улсын ISO 45001 стандартын хүрээнд байгууллагууд юуг анхаарах хэрэгтэй вэ? Шинэ стандарт нь хөдөлмөрийн аюулгүй байдлыг сайжруулах зорилготой.",
+    body: "",
+    image: "/project-office.jpg",
+  },
+  {
+    id: 2,
+    date: "2026-05-10",
+    category: "Сургалт",
+    title: "Өндөрт ажиллах үеийн эрсдэлээс сэргийлэх нь",
+    description: "Барилгын талбайд өндөрт ажиллах үеийн ослын шалтгаан, түүнээс урьдчилан сэргийлэх арга замуудын талаарх дэлгэрэнгүй зөвлөгөө.",
+    body: "",
+    image: "/safety-bg.jpg",
+  },
+  {
+    id: 3,
+    date: "2026-05-02",
+    category: "Үйл явдал",
+    title: "Галын аюулгүй байдлын сургалт амжилттай боллоо",
+    description: "Өнгөрсөн 7 хоногт зохион байгуулагдсан галын аюулаас урьдчилан сэргийлэх практик сургалтын тайлан. Сургалтад 50 гаруй ажилтан хамрагдсан.",
+    body: "",
+    image: "/real-estate-bg.jpg",
+  },
+  {
+    id: 4,
+    date: "2026-04-28",
+    category: "Зөвлөмж",
+    title: "Ажлын байрны стресс ба ХАБЭА",
+    description: "Ажилтны сэтгэл зүйн эрүүл мэнд ажлын бүтээмжид хэрхэн нөлөөлөх вэ? Стрессийг бууруулах аргууд болон нөлөөлөл.",
+    body: "",
+    image: "/project-office.jpg",
+  },
+  {
+    id: 5,
+    date: "2026-04-20",
+    category: "Сургалт",
+    title: "Анхны тусламж үзүүлэх чадварыг сайжруулах",
+    description: "Ажлын байранд осол гарсан үед үзүүлэх анхны тусламжийн 5 чухал алхам болон шаардлагатай мэдлэгүүд.",
+    body: "",
+    image: "/safety-bg.jpg",
+  },
+  {
+    id: 6,
+    date: "2026-04-15",
+    category: "Үйл явдал",
+    title: "Шинэ ажилтнуудад зориулсан ХАБЭА өдөрлөг",
+    description: "Компанид шинээр орсон ажилтнуудад зориулсан хөдөлмөрийн аюулгүй байдлын анхан шатны танилцуулга өдөрлөг амжилттай болж өндөрлөлөө.",
+    body: "",
+    image: "/real-estate-bg.jpg",
+  },
+];
 
-  return Object.fromEntries(rows.map((row) => [row.key, row.value]));
-}
-
-export function parseExtra<T>(page: SafetyPageContent, fallback: T): T {
-  try {
-    return { ...fallback, ...(JSON.parse(page.extra_json) as Partial<T>) };
-  } catch {
-    return fallback;
-  }
-}
-
-export function phoneHref(phone: string) {
-  return `tel:${phone.replace(/[^\d+]/g, "")}`;
-}
+export const safetyServices: SafetyService[] = [
+  {
+    id: 1,
+    title: "Ажлын байрны эрсдэлийн үнэлгээ",
+    description: "Ажлын байрны аюулгүй нөхцөлийг бүрэн шинжилж, эрсдэлийг тодорхойлно.",
+    icon: "📋",
+    color: "#e67e22",
+  },
+  {
+    id: 2,
+    title: "Аюулгүй байдлын сургалт ба сертификат",
+    description: "Олон улсын стандартад нийцсэн сургалт, сертификатын хөтөлбөрүүд.",
+    icon: "🎓",
+    color: "#2980b9",
+  },
+  {
+    id: 3,
+    title: "Ажлын байрны аудит ба шинжилгээ",
+    description: "Тогтмол хяналт шалгалт, дүн шинжилгээ, тайлан гаргах үйлчилгээ.",
+    icon: "🔍",
+    color: "#27ae60",
+  },
+  {
+    id: 4,
+    title: "Эрүүлжүүлэлтийн хамтын ажиллагаа",
+    description: "Ажилчдын эрүүл мэнд, сэтгэл зүйн дэмжлэг, хамтын ажиллагаа.",
+    icon: "🤝",
+    color: "#8e44ad",
+  },
+];
