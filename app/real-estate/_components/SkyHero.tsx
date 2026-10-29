@@ -1,9 +1,25 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowRight } from "./icons";
+
+// Three.js (~150KB gzip) loads only on the client, after the page is interactive.
+const TowerScene = dynamic(() => import("./TowerScene"), { ssr: false });
+
+// "pending" until the client has decided; the page preloader waits for "ready" or "off".
+type Scene3D = "pending" | "off" | "loading" | "ready";
+
+function supportsWebGL() {
+  try {
+    const canvas = document.createElement("canvas");
+    return Boolean(canvas.getContext("webgl2") || canvas.getContext("webgl"));
+  } catch {
+    return false;
+  }
+}
 
 type Props = {
   titlePre: string;
@@ -22,11 +38,19 @@ type Props = {
  */
 export default function SkyHero({ titlePre, titleEm, subtitle, cta, windowImage }: Props) {
   const ref = useRef<HTMLElement>(null);
+  // Static image shows first; the 3D tower replaces it once its first frame is drawn.
+  const [scene3d, setScene3d] = useState<Scene3D>("pending");
+  const handleReady = useCallback(() => setScene3d("ready"), []);
+  const handleFail = useCallback(() => setScene3d("off"), []);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setScene3d("off");
+      return;
+    }
+    setScene3d(supportsWebGL() ? "loading" : "off");
 
     let frame = 0;
     const update = () => {
@@ -56,11 +80,14 @@ export default function SkyHero({ titlePre, titleEm, subtitle, cta, windowImage 
       id="re-sky"
       className="re-sky"
       data-head="on"
+      data-3d={scene3d}
       style={{ "--re-window-image": `url("${windowImage}")` } as React.CSSProperties}
     >
       <div className="re-sky__stage">
         <div className="re-sky__bg" aria-hidden="true" />
         <div className="re-sky__dusk" aria-hidden="true" />
+        {/* Behind every cloud: the sky turns to the page colour while the clouds stay white */}
+        <div className="re-sky__wash" aria-hidden="true" />
 
         <Image
           src="/real-estate/hero/cloud-b.webp"
@@ -93,13 +120,16 @@ export default function SkyHero({ titlePre, titleEm, subtitle, cta, windowImage 
 
         <Image
           src="/real-estate/hero/tower.webp"
-          alt="Oigon Numrug Properties-ийн хамтарсан орон сууцны төсөл"
+          alt="Ойгон Нөмрөг Properties — орон сууцны барилга"
           width={960}
           height={2045}
           priority
           sizes="(min-width: 768px) 820px, 90vw"
           className="re-sky__tower"
         />
+        {(scene3d === "loading" || scene3d === "ready") && (
+          <TowerScene trackRef={ref} onReady={handleReady} onFail={handleFail} />
+        )}
 
         <Image
           src="/Logo_White color - 2.png"
@@ -109,7 +139,7 @@ export default function SkyHero({ titlePre, titleEm, subtitle, cta, windowImage 
           className="re-sky__mark"
           aria-hidden="true"
         />
-        <div className="re-sky__window" role="img" aria-label="Oigon Numrug Properties" />
+        <div className="re-sky__window" role="img" aria-label="Ойгон Нөмрөг Properties" />
 
         <Image
           src="/real-estate/hero/cloud-a.webp"
@@ -120,16 +150,18 @@ export default function SkyHero({ titlePre, titleEm, subtitle, cta, windowImage 
           className="re-sky__cloud re-sky__cloud--a"
           aria-hidden="true"
         />
-        <Image
-          src="/real-estate/hero/mist.webp"
-          alt=""
-          width={2400}
-          height={760}
-          priority
-          className="re-sky__mist"
-          aria-hidden="true"
-        />
-        <div className="re-sky__wash" aria-hidden="true" />
+        {/* Cloud bank: rises to a white-out, then lifts away (with its underside) to reveal the page */}
+        <div className="re-sky__fog" aria-hidden="true">
+          <Image src="/real-estate/hero/mist.webp" alt="" width={2400} height={760} priority className="re-sky__mist" />
+          <Image
+            src="/real-estate/hero/mist-under.webp"
+            alt=""
+            width={2400}
+            height={1000}
+            loading="eager"
+            className="re-sky__mist re-sky__mist--under"
+          />
+        </div>
       </div>
     </section>
   );

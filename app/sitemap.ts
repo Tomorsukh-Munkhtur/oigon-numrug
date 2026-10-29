@@ -1,5 +1,4 @@
 import type { MetadataRoute } from "next";
-import { projects } from "@/lib/real-estate/content";
 import { safetyNews } from "@/lib/safety/content";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://oigonnumrug.mn";
@@ -16,10 +15,6 @@ type Route = {
 const staticRoutes: Route[] = [
   { path: "/", changeFrequency: "weekly", priority: 1.0 },
   { path: "/real-estate", changeFrequency: "weekly", priority: 0.95 },
-  { path: "/real-estate/projects", changeFrequency: "weekly", priority: 0.9 },
-  { path: "/real-estate/about", changeFrequency: "monthly", priority: 0.7 },
-  { path: "/real-estate/services", changeFrequency: "monthly", priority: 0.7 },
-  { path: "/real-estate/contact", changeFrequency: "monthly", priority: 0.6 },
   { path: "/safety", changeFrequency: "weekly", priority: 0.9 },
   { path: "/safety/news", changeFrequency: "weekly", priority: 0.8 },
   { path: "/safety/about", changeFrequency: "monthly", priority: 0.7 },
@@ -32,11 +27,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const routes: Route[] = [
     ...staticRoutes,
-    ...projects.map((project) => ({
-      path: `/real-estate/projects/${project.id}`,
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    })),
     ...safetyNews.map((news) => ({
       path: `/safety/news/${news.id}`,
       changeFrequency: "yearly" as const,

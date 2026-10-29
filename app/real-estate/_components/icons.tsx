@@ -70,8 +70,18 @@ export function CheckIcon(props: IconProps) {
   );
 }
 
+export function MessageIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9.3 9.3 0 0 1-3.6-.7L3 21l1.6-4.4A8 8 0 0 1 3 11.5 8.6 8.6 0 0 1 12 3a8.6 8.6 0 0 1 9 8.5z" />
+      <path d="M8 12.5l2.6-2.6 2.4 2 3-3" />
+    </Svg>
+  );
+}
+
 export function ChannelIcon({ kind, size = 22 }: IconProps & { kind: ContactChannelKind }) {
   if (kind === "email") return <MailIcon size={size} />;
   if (kind === "location") return <PinIcon size={size} />;
+  if (kind === "social") return <MessageIcon size={size} />;
   return <PhoneIcon size={size} />;
 }

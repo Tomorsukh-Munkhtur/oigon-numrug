@@ -4,14 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { sectionHref, sections, type SectionId } from "@/lib/real-estate/content";
 import { ArrowRight, PhoneIcon } from "./icons";
 
-const NAV = [
-  { href: "/real-estate/projects", label: "Төслүүд" },
-  { href: "/real-estate/services", label: "Үйлчилгээ" },
-  { href: "/real-estate/about", label: "Бидний тухай" },
-  { href: "/real-estate/contact", label: "Холбоо барих" },
-];
+// Нэг хуудастай сайт: цэс бүр нүүр хуудасны хэсэг рүү гүйлгэнэ.
+const NAV = sections.map((section) => ({ id: section.id, href: sectionHref(section.id), label: section.label }));
 
 type Props = {
   phone?: { label: string; href: string };
@@ -23,6 +20,8 @@ export default function Header({ phone, email }: Props) {
   const [open, setOpen] = useState(false);
   // Нүүр хуудасны тэнгэрийн hero дээр байх үед header тунгалаг.
   const [overSky, setOverSky] = useState(pathname === "/real-estate");
+  // Одоо дэлгэцэн дээр байгаа хэсэг — цэсэнд тодорно.
+  const [active, setActive] = useState<SectionId | null>(null);
 
   useEffect(() => {
     const sky = pathname === "/real-estate" ? document.getElementById("re-sky") : null;
@@ -30,7 +29,14 @@ export default function Header({ phone, email }: Props) {
       setOverSky(false);
       return;
     }
-    const update = () => setOverSky(sky.getBoundingClientRect().bottom > 90);
+    // Clear only over the dark sky: once the white clouds cover the screen (~70% of the hero
+    // scroll) the light nav text would vanish, so the solid bar comes back.
+    const update = () => {
+      const rect = sky.getBoundingClientRect();
+      const total = sky.offsetHeight - window.innerHeight;
+      const progress = total > 0 ? -rect.top / total : 1;
+      setOverSky(rect.bottom > 90 && progress < 0.7);
+    };
     update();
     window.addEventListener("scroll", update, { passive: true });
     window.addEventListener("resize", update);
@@ -38,6 +44,26 @@ export default function Header({ phone, email }: Props) {
       window.removeEventListener("scroll", update);
       window.removeEventListener("resize", update);
     };
+  }, [pathname]);
+
+  useEffect(() => {
+    const targets = NAV.map((item) => document.getElementById(item.id)).filter((el) => el !== null);
+    if (targets.length === 0) return;
+    const visible = new Set<string>();
+    // A section is current while it crosses a thin band just above the middle of the screen
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) visible.add(entry.target.id);
+          else visible.delete(entry.target.id);
+        }
+        const current = NAV.filter((item) => visible.has(item.id)).at(-1);
+        setActive(current ? current.id : null);
+      },
+      { rootMargin: "-40% 0px -55% 0px" },
+    );
+    targets.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
   }, [pathname]);
 
   useEffect(() => {
@@ -54,21 +80,19 @@ export default function Header({ phone, email }: Props) {
     };
   }, [open]);
 
-  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
   const close = () => setOpen(false);
 
   return (
     <>
       <header className={`re-header${overSky && !open ? " re-header--clear" : ""}`}>
         <div className="re-wrap re-header__bar">
-          <Link href="/real-estate" className="re-header__logo" aria-label="Oigon Numrug Properties — нүүр" onClick={close}>
-            <Image src="/Logo_Primary color - 2.png" alt="Oigon Numrug Properties" width={5884} height={1493} priority />
+          <Link href="/real-estate" className="re-header__logo" aria-label="Ойгон Нөмрөг Properties — нүүр" onClick={close}>
+            <Image src="/Logo_White color - 2.png" alt="Ойгон Нөмрөг Properties" width={5884} height={1493} priority />
           </Link>
 
           <nav className="re-header__nav" aria-label="Үндсэн цэс">
-            {NAV.map((item, index) => (
-              <Link key={item.href} href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
+            {NAV.map((item) => (
+              <Link key={item.id} href={item.href} aria-current={active === item.id ? "true" : undefined}>
                 {item.label}
               </Link>
             ))}
@@ -81,7 +105,7 @@ export default function Header({ phone, email }: Props) {
                 {phone.label}
               </a>
             )}
-            <Link href="/real-estate/contact" className="re-btn re-btn--ink re-btn--sm">
+            <Link href={sectionHref("contact")} className="re-btn re-btn--ink re-btn--sm">
               Зөвлөгөө авах
               <ArrowRight size={16} />
             </Link>
@@ -101,15 +125,14 @@ export default function Header({ phone, email }: Props) {
 
       <div id="re-menu" className="re-menu" data-open={open} aria-hidden={!open}>
         <nav className="re-menu__links" aria-label="Гар утасны цэс">
-          {NAV.map((item, index) => (
+          {NAV.map((item) => (
             <Link
-              key={item.href}
+              key={item.id}
               href={item.href}
-              aria-current={isActive(item.href) ? "page" : undefined}
+              aria-current={active === item.id ? "true" : undefined}
               tabIndex={open ? undefined : -1}
               onClick={close}
             >
-              <span>{String(index + 1).padStart(2, "0")}</span>
               {item.label}
             </Link>
           ))}

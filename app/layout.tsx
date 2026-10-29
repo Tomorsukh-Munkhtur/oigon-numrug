@@ -5,7 +5,6 @@ import "./globals.css";
 const roboto = Roboto({
   variable: "--font-roboto",
   subsets: ["latin", "cyrillic", "cyrillic-ext"],
-  weight: ["400", "500", "700"],
 });
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://oigonnumrug.mn";
@@ -86,6 +85,8 @@ export default function RootLayout({
     <html
       lang="mn"
       className={`${roboto.variable} h-full antialiased`}
+      // Next.js keeps CSS smooth scrolling for in-page (#section) links but not for route changes
+      data-scroll-behavior="smooth"
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         {children}
